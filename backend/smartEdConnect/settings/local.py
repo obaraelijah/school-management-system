@@ -8,16 +8,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 DEBUG = True
 
-SECRET_KEY = "4848474383389rffnnffnr"
+SECRET_KEY = ""
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'school_management_system_devdb',
-        'USER': 'abiorh',
-        'PASSWORD': 'Lucifer_001',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
     }
 }
 
@@ -34,6 +34,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'abiolaadedayo1993@gmail.com'
-EMAIL_HOST_PASSWORD = 'wrnxvwtegzgwybfa'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
 

@@ -4,7 +4,9 @@ from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from .models import School
+from accounts.models import Role, CustomUser
 from .serializers import SchoolSerializer, SchoolUpdateLogoSerializer
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 
 class CreateAndListSchool(APIView):
@@ -14,6 +16,7 @@ class CreateAndListSchool(APIView):
     POST: Create a new school.
     GET: Retrieve a list of all schools.
     """
+    permission_classes = [IsAdminUser]
 
     def post(self, request: Request):
         """
@@ -43,11 +46,21 @@ class RetrieveUpdateDeleteSchool(APIView):
     PUT: Update school information (allows partial updates).
     DELETE: Delete a specific school.
     """
+    permission_classes = [IsAuthenticated]
 
     def get(self, request: Request, pk):
         """
         GET method to retrieve detailed information about a specific school by using it's id.
         """
+        # user = request.user
+       
+        # school_admin = user.role_id
+        # school_admin_role = Role.objects.get(pk=school_admin)
+        # school_admin_role = school_admin_role.role_name
+        # print(f"User: {user.username},Role: {school_admin_role}")
+       
+        # if (school_admin_role != "SCHOOLADMIN"):
+        #     return Response({"error": "User Not Authorized"}, status=status.HTTP_403_FORBIDDEN)
         try:
             queryset = School.objects.get(pk=pk)
         except School.DoesNotExist:
@@ -89,6 +102,8 @@ class UpdateSchoolLogo(APIView):
 
     PUT: Update the school's logo.
     """
+    permission_classes = [IsAuthenticated]
+
     def put(self, request: Request, pk):
         """
         PUT method to update the school's logo.

@@ -6,17 +6,17 @@ import uuid
 
 
 class Role(models.Model):
-    role_id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True)
+    role_id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True, editable=False)
     role_name = models.CharField(max_length=255, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
 
 class CustomUser(AbstractUser):
-    user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True, editable=False)
     username = None
     email = models.EmailField(_("email address"), unique=True)
-    confirm_email_token = models.UUIDField(default=uuid.uuid4)
+    confirm_email_token = models.UUIDField(default=uuid.uuid4, null=True)
     reset_password_token = models.UUIDField(default=uuid.uuid4)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

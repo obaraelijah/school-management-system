@@ -5,7 +5,9 @@ const NavBar = () => {
     <nav>
       <ul className='flex gap-7'>
         <li>
-          <NavLink to={'login'}>login</NavLink>
+          <NavLink to={'login'} className={'bg-white text-black'}>
+            login
+          </NavLink>
         </li>
 
         <li>

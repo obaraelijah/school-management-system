@@ -9,6 +9,8 @@ import { ToastContainer } from 'react-toastify';
 import AdminLayout from './components/layouts/AdminLayout';
 import Admin from './pages/admin/Admin';
 import SchoolInfo from './pages/admin/components/SchoolInfo';
+import About from './pages/about/About';
+import Contact from './pages/contact/Contact';
 
 function App() {
   return (
@@ -19,6 +21,9 @@ function App() {
           <Route index element={<Home />} />
           <Route path='signup' element={<SignUp />} />
           <Route path='login' element={<LogIn />} />
+
+          <Route path='/about' element={<About />} />
+          <Route path='/contact' element={<Contact />} />
         </Route>
 
         <Route path='dashboard' element={<DashboardLayout />}>

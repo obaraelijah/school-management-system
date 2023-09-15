@@ -16,7 +16,8 @@ export default {
           100: '#2071B2',
         },
         header: '#001C27',
-        btn: '#49BBBD;',
+        btn: '#49BBBD',
+        light: 'rgba(255, 255, 255, 0.30)',
       },
       padding: {
         sm: '0.625rem',

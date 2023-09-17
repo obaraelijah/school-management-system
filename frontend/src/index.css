@@ -2,9 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  position: relative;
+}
+
 /* Hide scrollbar for Chrome, Safari and Opera */
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+.mask {
+  mask-image: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 30%);
+  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 30%);
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */

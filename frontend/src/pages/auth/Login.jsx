@@ -38,9 +38,8 @@ const LogIn = () => {
 
   return (
     <>
-      <h2 className='pb-4 md:text-xl text-center'>Welcome to smartEdConnect</h2>
-      <div className='grid grid-cols-2 gap-6 w-full'>
-        <div className='col-span-1'>
+      <div className='md:grid grid-cols-2 gap-6 w-full '>
+        <div className='col-span-1 hidden md:block'>
           <img src={img} alt='' className='w-full h-full rounded-lg' />
         </div>
         <div className='w-full col-span-1 px-10'>

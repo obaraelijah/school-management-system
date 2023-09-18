@@ -38,7 +38,7 @@ const SchoolInfo = () => {
     <>
       <h2 className='py-3 md:text-xl'>New school details</h2>
       <div className='grid grid-cols-3 gap-6 w-full'>
-        <div>
+        <div className='hidden md:block'>
           <img src={img} alt='' className='col-span-1 h-screen rounded-lg' />
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className='w-full col-span-2'>

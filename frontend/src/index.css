@@ -1,3 +1,33 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.link {
+  color: #fff;
+  text-transform: capitalize;
+}
+
+.input {
+  @apply border w-full py-3 rounded-lg px-sm text-black mt-2
+}
+
+.input:focus {
+  outline: none;
+}
+
+.submit {
+  @apply border self-center bg-btn text-white w-2/4 rounded-xl py-2
+}

@@ -52,15 +52,6 @@ class RetrieveUpdateDeleteSchool(APIView):
         """
         GET method to retrieve detailed information about a specific school by using it's id.
         """
-        # user = request.user
-       
-        # school_admin = user.role_id
-        # school_admin_role = Role.objects.get(pk=school_admin)
-        # school_admin_role = school_admin_role.role_name
-        # print(f"User: {user.username},Role: {school_admin_role}")
-       
-        # if (school_admin_role != "SCHOOLADMIN"):
-        #     return Response({"error": "User Not Authorized"}, status=status.HTTP_403_FORBIDDEN)
         try:
             queryset = School.objects.get(pk=pk)
         except School.DoesNotExist:

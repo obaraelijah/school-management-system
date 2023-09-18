@@ -28,8 +28,18 @@ class CreateListRoles(APIView):
         serializer = RoleSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            response = {
+                "status": "success",
+                "message": "User role created successfully",
+                "data": serializer.data,
+            }
+            return Response(response, status=status.HTTP_201_CREATED)
+        bad_request_response = {
+            "status": "failed",
+            "message": "User role not created",
+            "error_message: ": serializer.errors,
+        }
+        return Response(bad_request_response, status=status.HTTP_400_BAD_REQUEST)
     
     def get(self, request: Request):
         """
@@ -37,7 +47,11 @@ class CreateListRoles(APIView):
         """
         queryset = Role.objects.all()
         serializer = RoleSerializer(instance=queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        response = {
+                "status": "success",
+                "data": serializer.data,
+            }
+        return Response(response, status=status.HTTP_200_OK)
 
 
 class RetrieveUpdateRole(APIView):
@@ -56,10 +70,18 @@ class RetrieveUpdateRole(APIView):
         try:
             queryset = Role.objects.get(pk=pk)
         except Role.DoesNotExist:
-            return Response({"error": "Role not found"}, status=status.HTTP_404_NOT_FOUND)
+            error_response = {
+                "status": "error",
+                "message": "User role not found"
+            }
+            return Response(error_response, status=status.HTTP_404_NOT_FOUND)
         
         serializer = RoleSerializer(instance=queryset)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        response = {
+            "status": "success",
+            "data": serializer.data
+        }
+        return Response(response, status=status.HTTP_200_OK)
     
     def put(self, request: Request, pk):
         """
@@ -68,27 +90,41 @@ class RetrieveUpdateRole(APIView):
         try:
             queryset = Role.objects.get(pk=pk)
         except Role.DoesNotExist:
-            return Response({"error": "Role not found"}, status=status.HTTP_404_NOT_FOUND)
+            error_response = {
+                "status": "error",
+                "message": "User role not found"
+            }
+            return Response(error_response, status=status.HTTP_404_NOT_FOUND)
         
         data = request.data
         serializer = RoleSerializer(queryset, data=data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            response = {
+                "status": "success",
+                "message": "User role updated successfully",
+                "data": serializer.data,
+            }
+            return Response(response, status=status.HTTP_202_ACCEPTED)
+        error_response = {
+            "status": "failed",
+            "message": "User role update failed",
+            "error_message: ": serializer.errors,
+        }
+        return Response(error_response, status=status.HTTP_400_BAD_REQUEST)
     
 
 class CreateUsers(APIView):
     """
     CreateUsers class handles the creation of user accounts.
 
-    POST: Create a new user account and send a confirmation email.
+    POST: Create a new user account and send a confirmation email(requires admin authentication)..
     """
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request: Request):
         """
-        POST method to create a new user account and send a confirmation email.
+        POST method to create a new user account and send a confirmation email(requires admin authentication)..
         """
         data = request.data
         serializer = CustomUserSerializer(data=data)
@@ -102,13 +138,23 @@ class CreateUsers(APIView):
 
             # Generate a confirmation URL
             
-            confirmation_url = f"http://127.0.0.1:8000/api/v1/confirm_email?user_id={user.id}&token={user.confirm_email_token}/"
+            confirmation_url = f"http://127.0.0.1:8000/api/v1/confirm_email?user_id={user.id}&token={user.confirm_email_token}"
 
             message += f'\n\n{confirmation_url}'
 
             send_mail(subject, message, from_email, recipient_list)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            response = {
+                "status": "success",
+                "message": "Account created successfully. Please check your email for a confirmation link.",
+                "data": serializer.data
+                }
+            return Response(response, status=status.HTTP_201_CREATED)
+        bad_request_response = {
+            "status": "failed",
+            "message": "Account not created",
+            "error_message": serializer.errors
+        }
+        return Response(bad_request_response, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ListUsers(APIView):
@@ -125,7 +171,11 @@ class ListUsers(APIView):
         """
         queryset = CustomUser.objects.all()
         serializer = CustomUserSerializer(instance=queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        response = {
+            "status": "success",
+            "data": serializer.data
+        }
+        return Response(response, status=status.HTTP_200_OK)
 
 
 class RetrieveUpdateDeleteUser(APIView):
@@ -146,14 +196,25 @@ class RetrieveUpdateDeleteUser(APIView):
             
             queryset = CustomUser.objects.get(pk=pk)
         except CustomUser.DoesNotExist:
-            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+            error_response = {
+                "status": "error",
+                "message": "User not found"
+            }
+            return Response(error_response, status=status.HTTP_404_NOT_FOUND)
         
         serializer = CustomUserSerializer(instance=queryset)
         user = request.user
         if (user.email != queryset.email):
-            return Response({"error": "User Not Authorized"}, status=status.HTTP_403_FORBIDDEN)
-    
-        return Response(serializer.data, status=status.HTTP_200_OK)
+            authentication_response = {
+                "status": "failed",
+                "message": "User Not Authorized"
+            }
+            return Response(authentication_response, status=status.HTTP_403_FORBIDDEN)
+        response = {
+            "status": "success",
+            "data": serializer.data
+        }
+        return Response(response, status=status.HTTP_200_OK)
     
     def put(self, request: Request, pk):
         """
@@ -162,28 +223,58 @@ class RetrieveUpdateDeleteUser(APIView):
         try:
             queryset = CustomUser.objects.get(pk=pk)
         except CustomUser.DoesNotExist:
-            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+            error_response = {
+                "status": "error",
+                "message": "User not found"
+            }
+            return Response(error_response, status=status.HTTP_404_NOT_FOUND)
         
         user = request.user
         if (user.email != queryset.email):
-            return Response({"error": "User Not Authorized"}, status=status.HTTP_403_FORBIDDEN)
+            authentication_response = {
+                "status": "failed",
+                "message": "User Not Authorized"
+            }
+            return Response(authentication_response, status=status.HTTP_403_FORBIDDEN)
         data = request.data
         serializer = CustomUserSerializer(queryset, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            response = {
+                "status": "success",
+                "message": "Account updated suucessfully",
+                "data": serializer.data
+            }
+            return Response(response, status=status.HTTP_202_ACCEPTED)
+        bad_request_response = {
+            "status": "failed",
+            "message": "Account update failed",
+            "error_message": serializer.errors
+        }
+        return Response(bad_request_response, status=status.HTTP_400_BAD_REQUEST)
     
     def delete(self, request: Request, pk):
         try:
             queryset = CustomUser.objects.get(pk=pk)
         except CustomUser.DoesNotExist:
-            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+            error_response = {
+                "status": "error",
+                "message": "User not found"
+            }
+            return Response(error_response, status=status.HTTP_404_NOT_FOUND)
         user = request.user
         if (user.email != queryset.email):
-            return Response({"error": "User Not Authorized"}, status=status.HTTP_403_FORBIDDEN)
+            authentication_response = {
+                "status": "failed",
+                "message": "User Not Authorized"
+            }
+            return Response(authentication_response, status=status.HTTP_403_FORBIDDEN)
         queryset.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        response = {
+            "status": "success",
+            "message": "Account deleted successfully."
+        }
+        return Response(response, status=status.HTTP_200_OK)
 
 
 class UserConfirmEmailAddress(APIView):
@@ -204,16 +295,32 @@ class UserConfirmEmailAddress(APIView):
         try:
             user = CustomUser.objects.get(pk=user_id)
         except CustomUser.DoesNotExist:
-            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+            error_response = {
+                "status": "error",
+                "message": "User not found"
+            }
+            return Response(error_response, status=status.HTTP_404_NOT_FOUND)
         
         if (user_id != str(user.pk) or confirm_email_token != str(user.confirm_email_token)):
-            return Response({"error": "User Not Authorized"}, status=status.HTTP_403_FORBIDDEN)
+            authentication_response = {
+                "status": "failed",
+                "message": "User Not Authorized"
+            }
+            return Response(authentication_response, status=status.HTTP_403_FORBIDDEN)
         
         if (confirm_email_token == str(user.confirm_email_token)):
             user.confirm_email_token = None
             user.save()
-            return Response({"Message": "User email confirmed"}, status=status.HTTP_200_OK)
-        return Response({"error": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
+            response = {
+                "status": "success",
+                "Message": "User Account email confirmed"
+            }
+            return Response(response, status=status.HTTP_200_OK)
+        error_response = {
+            "status": "failed",
+            "message": "Invalid Token"
+        }
+        return Response(error_response, status=status.HTTP_400_BAD_REQUEST)
     
 
 class UserForgetPassword(APIView):
@@ -232,7 +339,11 @@ class UserForgetPassword(APIView):
         try:
             user = CustomUser.objects.get(email=email)
         except ObjectDoesNotExist:
-            return Response("User not found", status=status.HTTP_404_NOT_FOUND)
+            error_response = {
+                "status": "error",
+                "message": "User not found"
+            }
+            return Response(error_response, status=status.HTTP_404_NOT_FOUND)
         
         # Send a confirmation email with a forget password link
         subject = 'Reset your password'
@@ -248,9 +359,17 @@ class UserForgetPassword(APIView):
 
         try:
             send_mail(subject, message, from_email, recipient_list)
-            return Response({"message": "Email sent successfully"}, status=status.HTTP_200_OK)
+            response = {
+                "status": "success",
+                "message": "Email sent successfully"
+            }
+            return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response(f"Email not sent: {str(e)}", status=status.HTTP_400_BAD_REQUEST)
+            failed_response = {
+                "status": "failed",
+                "message": f"Email not sent: {str(e)}"
+            }
+            return Response(failed_response, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserResetPassword(APIView):
@@ -271,10 +390,18 @@ class UserResetPassword(APIView):
         try:
             user = CustomUser.objects.get(pk=user_id)
         except CustomUser.DoesNotExist:
-            return Response("User not found", status=status.HTTP_404_NOT_FOUND)
+            error_response = {
+                "status": "error",
+                "message": "User not found"
+            }
+            return Response(error_response, status=status.HTTP_404_NOT_FOUND)
         
         if (user_id != str(user.id) or reset_password_token != str(user.reset_password_token)):
-            return Response({"error": "User Not Authorized"}, status=status.HTTP_403_FORBIDDEN)
+            authentication_response = {
+                "status": "failed",
+                "message": "User Not Authorized"
+            }
+            return Response(authentication_response, status=status.HTTP_403_FORBIDDEN)
         
         if (reset_password_token == str(user.reset_password_token)):
             user.reset_password_token = uuid.uuid4()
@@ -282,5 +409,14 @@ class UserResetPassword(APIView):
             serializer = CustomUserSerializer(user, data=data, partial=True)
             if serializer.is_valid():
                 serializer.save()
-                return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                response = {
+                    "status": "success",
+                    "message": "Password reset successfully"
+                }
+                return Response(response, status=status.HTTP_202_ACCEPTED)
+        bad_request_response = {
+            "status": "failed",
+            "message": "Account update failed",
+            "error_message": serializer.errors
+        }    
+        return Response(bad_request_response, status=status.HTTP_400_BAD_REQUEST)

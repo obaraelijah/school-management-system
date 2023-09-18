@@ -42,6 +42,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'school_module.apps.SchoolModuleConfig',
     'accounts.apps.AccountsConfig',
+    'department_module.apps.DepartmentModuleConfig',
+    'teacher_module.apps.TeacherModuleConfig',
+    'course_module.apps.CourseModuleConfig',
+    'course_materials_module.apps.CourseMaterialsModuleConfig',
+    'student_module.apps.StudentModuleConfig',
+    'non_teaching_staff_module.apps.NonTeachingStaffModuleConfig',
 ]
 
 MIDDLEWARE = [

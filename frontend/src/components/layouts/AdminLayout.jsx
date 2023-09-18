@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import AdminHeader from '../headers/admin/AdminHeader';
 
-const DashboardLayout = () => {
+const AdminLayout = () => {
   return (
     <div className='flex md:h-screen overflow-hidden '>
       <AdminHeader />
@@ -12,4 +12,4 @@ const DashboardLayout = () => {
   );
 };
 
-export default DashboardLayout;
+export default AdminLayout;

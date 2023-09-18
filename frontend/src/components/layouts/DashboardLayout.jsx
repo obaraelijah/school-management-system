@@ -1,11 +1,12 @@
 import { Outlet } from 'react-router-dom';
+import Header from '../headers/dashboard/Header';
 
 const DashboardLayout = () => {
   return (
-    <>
-      <h2>DashboardLayout header</h2>
+    <main className='md:flex md:h-screen'>
+      <Header />
       <Outlet />
-    </>
+    </main>
   );
 };
 

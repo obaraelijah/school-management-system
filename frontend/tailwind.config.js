@@ -19,6 +19,10 @@ export default {
           100: '#2071B2',
         },
         header: '#001C27',
+        dashboard: {
+          100: '#111827',
+          200: '#ff9900',
+        },
         btn: '#49BBBD',
         light: 'rgba(255, 255, 255, 0.30)',
       },

@@ -6,8 +6,8 @@ import { RiMenu2Line } from 'react-icons/ri';
 const RootLayout = () => {
   return (
     <>
-      <header className='flex justify-between w-full py-7 px-5 bg-btn text-white sticky top-0 items-center z-50'>
-        <RiMenu2Line className='text-3xl md:hidden ' />
+      <header className='flex justify-between w-full py-7 px-5 bg-btn text-white sticky top-0 items-center z-50 mb-5 md:mb-0'>
+        <RiMenu2Line className='text-3xl md:hidden' />
         <Logo />
         <NavBar />
         <div className='flex justify-between gap-1 md:gap-4 items-center'>

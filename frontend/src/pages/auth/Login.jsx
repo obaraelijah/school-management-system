@@ -90,6 +90,11 @@ const LogIn = () => {
               login
             </Button>
           </form>
+          <p className='mt-4 text-center'>
+            <NavLink to={'/forgot-password'} className='text-blue-500 hover:underline'>
+              Forgot Password?
+            </NavLink>
+          </p>
         </div>
       </div>
     </>

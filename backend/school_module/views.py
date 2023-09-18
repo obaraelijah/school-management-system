@@ -4,7 +4,9 @@ from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from .models import School
+from accounts.models import Role, CustomUser
 from .serializers import SchoolSerializer, SchoolUpdateLogoSerializer
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 
 class CreateAndListSchool(APIView):
@@ -14,6 +16,7 @@ class CreateAndListSchool(APIView):
     POST: Create a new school.
     GET: Retrieve a list of all schools.
     """
+    permission_classes = [IsAdminUser]
 
     def post(self, request: Request):
         """
@@ -43,6 +46,7 @@ class RetrieveUpdateDeleteSchool(APIView):
     PUT: Update school information (allows partial updates).
     DELETE: Delete a specific school.
     """
+    permission_classes = [IsAuthenticated]
 
     def get(self, request: Request, pk):
         """
@@ -89,6 +93,8 @@ class UpdateSchoolLogo(APIView):
 
     PUT: Update the school's logo.
     """
+    permission_classes = [IsAuthenticated]
+
     def put(self, request: Request, pk):
         """
         PUT method to update the school's logo.

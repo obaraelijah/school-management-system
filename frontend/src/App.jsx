@@ -11,6 +11,7 @@ import Admin from './pages/admin/Admin';
 import SchoolInfo from './pages/admin/components/SchoolInfo';
 import About from './pages/about/About';
 import Contact from './pages/contact/Contact';
+import ForgotPassword from './pages/ForgotPassword';
 
 function App() {
   return (
@@ -21,9 +22,10 @@ function App() {
           <Route index element={<Home />} />
           <Route path='signup' element={<SignUp />} />
           <Route path='login' element={<LogIn />} />
-
+      
           <Route path='/about' element={<About />} />
           <Route path='/contact' element={<Contact />} />
+          <Route path='/forgot-password' element={<ForgotPassword />} />
         </Route>
 
         <Route path='dashboard' element={<DashboardLayout />}>

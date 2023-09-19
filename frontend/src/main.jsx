@@ -20,6 +20,7 @@ import SchoolInfo from './pages/admin/components/SchoolInfo.jsx';
 import RootLayout from './components/layouts/RootLayout.jsx';
 import AdminLayout from './components/layouts/AdminLayout.jsx';
 import Admin from './pages/admin/Admin.jsx';
+import ForgotPassword from './pages/auth/ForgotPassword.jsx';
 
 const queryClient = new QueryClient();
 
@@ -30,7 +31,7 @@ const router = createBrowserRouter(
         <Route index element={<Home />} />
         <Route path='signup' element={<SignUp />} />
         <Route path='login' element={<LogIn />} />
-
+        <Route path='forgot-password' element={<ForgotPassword/>}/>
         <Route path='/about' element={<About />} />
         <Route path='/contact' element={<Contact />} />
       </Route>

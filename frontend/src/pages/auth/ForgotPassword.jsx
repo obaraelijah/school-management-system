@@ -1,5 +1,5 @@
-import React from 'react'; // Make sure to import React if not already imported
-import Button from '../../components/Button'; // Make sure to import the Button component correctly
+import React from 'react';
+import Button from '../../components/Button';
 
 function ForgotPassword() {
   const handleResetPassword = () => {
@@ -7,8 +7,8 @@ function ForgotPassword() {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen flex justify-center items-center">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+    <div className="bg-gray-100">
+      <div className="bg-white p-8 rounded-lg shadow-md mx-auto mt-8 max-w-md">
         <h2 className="text-2xl font-semibold mb-4">Forgot Password</h2>
         <form onSubmit={handleResetPassword} className='flex flex-col gap-4' >
           <div>
@@ -23,7 +23,7 @@ function ForgotPassword() {
           </div>
           <Button type="submit" className="bg-blue-500 text-white py-2 rounded-lg">
             Reset Password
-          </Button> {/* Button with child text */}
+          </Button>
         </form>
       </div>
     </div>

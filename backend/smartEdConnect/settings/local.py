@@ -8,16 +8,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 DEBUG = True
 
-SECRET_KEY = ""
+SECRET_KEY = "86868yyytytyutututt66"
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': '',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
+        'NAME': 'smartedconnect_devdb',
+        'USER': 'abiorh',
+        'PASSWORD': 'Lucifer_001',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 

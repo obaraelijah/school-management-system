@@ -1,0 +1,75 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get All Users</title>
+</head>
+<body>
+    <h1>Get All Users</h1>
+
+    <!-- Get All Users Button -->
+    <button id="getAllUsersButton">Get All Users</button>
+
+    <!-- User Data Display -->
+    <h2>User Data</h2>
+    <pre id="userData"></pre>
+    <!-- ... (previous HTML code) ... -->
+
+<!-- JavaScript -->
+<script>
+    // Helper function to send HTTP GET requests with a bearer token
+    async function sendGetRequestWithToken(url, token) {
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+
+            return await response.json();
+        } catch (error) {
+            console.error('Request failed:', error);
+        }
+    }
+
+    // Get All Users Button
+    const getAllUsersButton = document.getElementById('getAllUsersButton');
+    getAllUsersButton.addEventListener('click', async () => {
+        // Replace with your actual API user endpoint
+        const getAllUsersEndpoint = 'https://smartedconnect.onrender.com/api/v1/schools/';
+
+        // Replace 'YOUR_BEARER_TOKEN_HERE' with your actual bearer token
+        const bearerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk1MzMzNzQ1LCJpYXQiOjE2OTUzMjY1NDUsImp0aSI6IjMzMWE0MTMzOTJlOTQyNDdiNzE1NDBkZmM1OTg2ZjQ3IiwidXNlcl9pZCI6ImZjN2YxNDVkLTUyMDEtNDc0NC04ZWZjLWZmMzQ0MDliNDQ0ZCJ9.wGQmMsaY6J5oyXxjLK2NpbUvxSgf9CUyusqh3DsXBpM';
+
+        // Get All Users with the bearer token
+        const userDataResponse = await sendGetRequestWithToken(getAllUsersEndpoint, bearerToken);
+
+        // Display user data in the "userData" element
+        const userDataElement = document.getElementById('userData');
+
+        // Create HTML elements to display the data
+        const userDataHTML = `
+            <p>School ID: ${userDataResponse[0].school_id}</p>
+            <p>School Name: ${userDataResponse[0].school_name}</p>
+            <p>School Email: ${userDataResponse[0].school_email}</p>
+            <p>School Logo: <img src="${userDataResponse[0].school_logo}" alt="School Logo" /></p>
+            <p>School Phone Number: ${userDataResponse[0].school_phone_number}</p>
+            <p>School Address: ${userDataResponse[0].school_address}</p>
+            <p>School City: ${userDataResponse[0].school_city}</p>
+            <p>School State: ${userDataResponse[0].school_state}</p>
+            <p>School Postal Code: ${userDataResponse[0].school_postal_code}</p>
+            <p>School Country: ${userDataResponse[0].school_country}</p>
+        `;
+
+        userDataElement.innerHTML = userDataHTML;
+    });
+</script>
+</body>
+</html>
+

@@ -135,7 +135,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWS_ORIGINS = [
     "http://localhost:5500",
     "http://localhost:5173",
-    "https://smartedconnect.onrender.com",
+    "https://smartedconnecttest-io.onrender.com",
 ]
 
 CORS_ALLOW_METHODS = [

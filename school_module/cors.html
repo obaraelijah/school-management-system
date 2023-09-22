@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Get All Users</title>
+</head>
+<body>
+    <h1>Login and Get All Users</h1>
+
+    <!-- Login Form -->
+    <form id="loginForm">
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email" required><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <!-- Get All Users Button -->
+    <button id="getAllUsersButton" style="display: none;">Get All Users</button>
+
+    <!-- User Data Display -->
+    <h2>User Data</h2>
+    <div id="userData"></div>
+
+    <!-- JavaScript -->
+    <script>
+        // Helper function to send HTTP GET requests with a bearer token
+        async function sendGetRequestWithToken(url, token) {
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+
+                return await response.json();
+            } catch (error) {
+                console.error('Request failed:', error);
+            }
+        }
+
+        // Helper function to send HTTP POST requests
+        async function sendPostRequest(url, data) {
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                return await response.json();
+            } catch (error) {
+                console.error('Request failed:', error);
+            }
+        }
+
+        // Login Form
+        const loginForm = document.getElementById('loginForm');
+        loginForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Replace with your actual login API endpoint
+            const loginEndpoint = 'https://smartedconnecttest-io.onrender.com/api/v1/auth/sign_in/';
+
+            // Replace 'YOUR_BEARER_TOKEN_HERE' with your actual bearer token
+            const loginData = {
+                email: email,
+                password: password,
+            };
+
+            // Send a POST request to the login endpoint
+            const loginResponse = await sendPostRequest(loginEndpoint, loginData);
+
+            if (loginResponse && loginResponse.token) {
+                // If login is successful, display the "Get All Users" button
+                const getAllUsersButton = document.getElementById('getAllUsersButton');
+                getAllUsersButton.style.display = 'block';
+
+                // Store the token for future requests
+                const bearerToken = loginResponse.token;
+
+                // Get All Users Button
+                getAllUsersButton.addEventListener('click', async () => {
+                    // Replace with your actual API user endpoint
+                    const getAllUsersEndpoint = 'https://smartedconnect.onrender.com/api/v1/schools/';
+
+                    // Get All Users with the bearer token
+                    const userDataResponse = await sendGetRequestWithToken(getAllUsersEndpoint, bearerToken);
+
+                    // Display user data in the "userData" element
+                    const userDataElement = document.getElementById('userData');
+
+                    // Create HTML elements to display the data
+                    const userDataHTML = `
+                        <p>School ID: ${userDataResponse[0].school_id}</p>
+                        <p>School Name: ${userDataResponse[0].school_name}</p>
+                        <p>School Email: ${userDataResponse[0].school_email}</p>
+                        <p>School Logo: <img src="${userDataResponse[0].school_logo}" alt="School Logo" /></p>
+                        <p>School Phone Number: ${userDataResponse[0].school_phone_number}</p>
+                        <p>School Address: ${userDataResponse[0].school_address}</p>
+                        <p>School City: ${userDataResponse[0].school_city}</p>
+                        <p>School State: ${userDataResponse[0].school_state}</p>
+                        <p>School Postal Code: ${userDataResponse[0].school_postal_code}</p>
+                        <p>School Country: ${userDataResponse[0].school_country}</p>
+                    `;
+
+                    userDataElement.innerHTML = userDataHTML;
+                });
+            }
+        });
+    </script>
+</body>
+</html>

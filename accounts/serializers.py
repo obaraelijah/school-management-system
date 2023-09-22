@@ -9,10 +9,11 @@ class CustomUserSerializer(serializers.ModelSerializer):
     It includes fields for user details and role_id.
     """
     role_id = serializers.UUIDField()
+    role_name = serializers.CharField(source='role.role_name', read_only=True)
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'first_name', 'last_name', 'email', 'password', 'role_id']
+        fields = ['id', 'first_name', 'last_name', 'email', 'password', 'role_id', 'role_name']
         
     def create(self, validated_data):
         """

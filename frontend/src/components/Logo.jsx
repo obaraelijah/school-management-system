@@ -1,9 +1,9 @@
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 const Logo = () => {
   return (
-    <NavLink className={'text-lg md:text-2xl'}>
+    <Link className={'text-lg md:text-2xl px-5'} to={'/'}>
       smart<span>Ed</span>Connect
-    </NavLink>
+    </Link>
   );
 };
 

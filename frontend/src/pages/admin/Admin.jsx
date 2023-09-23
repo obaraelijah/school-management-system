@@ -1,7 +1,9 @@
+import Header from '../../components/headers/dashboard/Header';
+
 const Admin = () => {
   return (
     <div>
-      <h2>super admin dashboard</h2>
+      <Header />
     </div>
   );
 };

@@ -13,14 +13,18 @@ export default {
         header: '#001C27',
         btn: '#49BBBD',
         'light-btn': 'rgba(73, 187, 189, 0.60)',
+        foreground: '#273240',
+        word: '#272835',
       },
       backgroundColor: {
+        form: 'rgb(188,206,226)',
+        background: '#F0F7FF',
         'custom-green': {
           100: '#2071B2',
         },
-        header: '#001C27',
+        header: '#0052B4',
         dashboard: {
-          100: '#111827',
+          100: '#5A6ACF',
           200: '#ff9900',
         },
         btn: '#49BBBD',
@@ -32,6 +36,10 @@ export default {
       },
       backgroundImage: {
         hero: 'linear-gradient(rgba(0,0,0,0.8),rgba(0,0,0,0.2)),url("/hero.webp")',
+        active:
+          'linear-gradient(90deg, rgba(255, 255, 255, 0.88) -17.8%, rgba(255, 255, 255, 0.00) 88.26%)',
+        error:
+          'url("../src/assets/404.png"), url("../src/assets/circle.svg"), url("../src/assets/cross.svg")',
       },
       boxShadow: {
         hero: '0px 4px 100px 0px rgba(29, 28, 24, 0.25)',

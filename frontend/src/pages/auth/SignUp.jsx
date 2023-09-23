@@ -1,8 +1,7 @@
 import Input from '../../components/forms/Input';
 import { useForm } from 'react-hook-form';
 //import { useState } from 'react';
-import img from '../../assets/books.webp';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const SignUp = () => {
   //const [image, setImage] = useState('');
@@ -36,93 +35,82 @@ const SignUp = () => {
   };
 
   return (
-    <>
-      <div className='md:grid grid-cols-2 gap-6 w-full'>
-        <div className='col-span-1 hidden md:block'>
-          <img src={img} alt='' className='h-full w-full rounded-lg' />
-        </div>
+    <div className='flex flex-col justify-center px-7 items-center lg:items-end lg:pr-20 w-full md:my-5 md:m-0 lg:bg-[url("../src/assets/designer.png")] bg-no-repeat py-10'>
+      <p className='self-center'>
+        already have an account?{' '}
+        <Link to={'/login'} className='text-blue-500'>
+          login
+        </Link>
+      </p>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className=' md:w-2/4 lg:1/3 col-span-2 flex flex-col bg-form px-6 py-3 rounded-md mt-3'
+      >
+        <Input
+          name='schoolName'
+          register={register}
+          className={'input'}
+          error={errors.schoolName}
+          label={'school name'}
+          options={{
+            required: 'please provide school name',
+          }}
+          placeholder={'enter name of school'}
+        />
 
-        <div className='w-full col-span-1 px-10'>
-          <div className='capitalize flex justify-between items-center bg-light-btn text-white w-2/3 mx-auto p-3 text-center rounded-3xl mb-10'>
-            <NavLink to={'/login'} className={'w-1/2'}>
-              login
-            </NavLink>
-            <NavLink to={'/signup'} className={'bg-btn w-1/2 rounded-2xl py-2'}>
-              register
-            </NavLink>
-          </div>
+        <Input
+          name='email'
+          register={register}
+          className={'input border w-full'}
+          error={errors.email}
+          label={'email'}
+          options={{
+            required: '',
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+              message: 'enter a valid email',
+            },
+          }}
+          placeholder={'enter your email address'}
+        />
 
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className='w-full col-span-2 flex flex-col'
-          >
-            <Input
-              name='schoolName'
-              register={register}
-              className={'input'}
-              error={errors.schoolName}
-              label={'school name'}
-              options={{
-                required: 'please provide school name',
-              }}
-              placeholder={'enter name of school'}
-            />
+        <Input
+          name='address'
+          register={register}
+          className={'input'}
+          error={errors.address}
+          label={'school address'}
+          options={{
+            required: 'please provide school address',
+          }}
+          placeholder={'enter school'}
+        />
 
-            <Input
-              name='email'
-              register={register}
-              className={'input border w-full'}
-              error={errors.email}
-              label={'email'}
-              options={{
-                required: '',
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                  message: 'enter a valid email',
-                },
-              }}
-              placeholder={'enter your email address'}
-            />
+        <Input
+          name='phoneNumber'
+          register={register}
+          className={'input'}
+          error={errors.phoneNumber}
+          label={'phone number'}
+          options={{
+            required: 'please provide phone number',
+          }}
+          placeholder={'phone number'}
+        />
 
-            <Input
-              name='address'
-              register={register}
-              className={'input'}
-              error={errors.address}
-              label={'school address'}
-              options={{
-                required: 'please provide school address',
-              }}
-              placeholder={'enter school'}
-            />
-
-            <Input
-              name='phoneNumber'
-              register={register}
-              className={'input'}
-              error={errors.phoneNumber}
-              label={'phone number'}
-              options={{
-                required: 'please provide phone number',
-              }}
-              placeholder={'phone number'}
-            />
-
-            <Input
-              name='files'
-              register={register}
-              className={'input'}
-              error={errors.files}
-              label={'school logo'}
-              type={'file'}
-            />
-            <button type='submit' className='submit self-center'>
-              Add
-            </button>
-          </form>
-        </div>
-      </div>
-    </>
+        <Input
+          name='files'
+          register={register}
+          className={'input'}
+          error={errors.files}
+          label={'school logo'}
+          type={'file'}
+        />
+        <button type='submit' className='submit self-center capitalize'>
+          register
+        </button>
+      </form>
+    </div>
   );
 };
 

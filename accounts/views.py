@@ -11,6 +11,15 @@ from django.core.exceptions import ObjectDoesNotExist
 import uuid
 
 
+class ApiStatusView(APIView):
+    permission_classes = [AllowAny]
+    
+    def get(self, request):
+        response = {"status": "success",
+                    "message": "API is running"}
+        return Response(response, status=status.HTTP_200_OK)
+
+
 class CreateListRoles(APIView):
     """
     CreateListRoles class handles the creation and listing of roles.

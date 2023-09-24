@@ -2,15 +2,17 @@ from django.urls import path
 from .views import (
     CreateListRoles, ListUsers, RetrieveUpdateRole, CreateUsers,
     RetrieveUpdateDeleteUser, UserConfirmEmailAddress, UserForgetPassword,
-    UserResetPassword)
+    UserResetPassword, ApiStatusView)
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
+    
 )
 
 
 
 urlpatterns = [
+    path("status/", ApiStatusView.as_view(), name="api-status"),
     path("roles/", CreateListRoles.as_view(), name="create-list-Roles"),
     path("roles/<str:pk>/", RetrieveUpdateRole.as_view(), name="retrieve-update-Role"),
     path("auth/sign_up/", CreateUsers.as_view(), name="create-Users"),

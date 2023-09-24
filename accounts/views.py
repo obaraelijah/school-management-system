@@ -27,6 +27,7 @@ class CreateListRoles(APIView):
     POST: Create a new role.
     GET: List all roles.
     """
+    
     permission_classes = [IsAdminUser]
     
     def post(self, request: Request):

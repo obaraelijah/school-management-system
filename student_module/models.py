@@ -18,11 +18,11 @@ class Student(models.Model):
     city = models.CharField(max_length=255)
     state = models.CharField(max_length=255)
     country = models.CharField(max_length=255)
-    school = models.ForeignKey(School, on_delete=models.CASCADE)
+    school = models.ForeignKey(School, on_delete=models.PROTECT, null=True, blank=True)
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     department = models.ForeignKey(Department, on_delete=models.PROTECT, null=True, blank=True)
     teachers = models.ManyToManyField(Teacher, related_name="students", blank=True, null=True)
-    course = models.ManyToManyField(Course, related_name="students", blank=True, null=True)
+    courses = models.ManyToManyField(Course, related_name="students", blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

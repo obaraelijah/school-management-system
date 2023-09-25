@@ -18,6 +18,7 @@ class CreateListStudentView(APIView):
         serializer = StudentSerializer(students, many=True)
         response = {
             "status": "success",
+            "message": "All Students retrieved successfully",
             "data": serializer.data
         }
         return Response(response, status=status.HTTP_200_OK)
@@ -49,6 +50,7 @@ class RetrieveUpdateDestroyStudentView(APIView):
             serializer = StudentSerializer(student)
             response = {
                 "status": "success",
+                "message": "Student retrieved successfully",
                 "data": serializer.data
             }
             return Response(response, status=status.HTTP_200_OK)
@@ -127,6 +129,7 @@ class RetrieveUpdateDestroyStudentSubmittedAssignment(APIView):
             serializer = StudentSubmitAssignmentSerializer(assignment)
             response = {
                 "status": "success",
+                "message": "Assignment retrieved successfully",
                 "data": serializer.data
             }
             return Response(response, status=status.HTTP_200_OK)
@@ -204,6 +207,7 @@ class RetrieveUpdateDestroyStudentAttendance(APIView):
             serializer = StudentAttendanceSerializer(attendance)
             response = {
                 "status": "success",
+                "message": "Student Attendance retrieved successfully",
                 "data": serializer.data
             }
             return Response(response, status=status.HTTP_200_OK)
@@ -306,6 +310,7 @@ class RetrieveUpdateDestroyStudentGrade(APIView):
             serializer = StudentGradeSerializer(grade)
             response = {
                 "status": "success",
+                "message": "Student Grade retrieved successfully",
                 "data": serializer.data
             }
             return Response(response, status=status.HTTP_200_OK)

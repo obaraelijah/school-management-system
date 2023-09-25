@@ -12,5 +12,5 @@ class Course(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     school = models.ForeignKey("school_module.School", on_delete=models.CASCADE)
-    department = models.ManyToManyField("department_module.Department", related_name="courses", null=True, blank=True)
-    teacher = models.ManyToManyField("teacher_module.Teacher", related_name="courses", null=True, blank=True)
+    departments = models.ManyToManyField("department_module.Department", related_name="courses", null=True, blank=True)
+    teachers = models.ManyToManyField("teacher_module.Teacher", related_name="courses", null=True, blank=True)

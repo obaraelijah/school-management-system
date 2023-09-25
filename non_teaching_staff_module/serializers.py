@@ -4,7 +4,10 @@ from .models import NonTeachingStaff
 
 class NonTeachingStaffSerializer(serializers.ModelSerializer):
     user_id = serializers.UUIDField()
+    user_first_name = serializers.CharField(source="user.first_name", read_only=True)
+    user_last_name = serializers.CharField(source="user.last_name", read_only=True)
     school_id = serializers.UUIDField()
+    school_name = serializers.CharField(source="school.school_name", read_only=True)
 
     class Meta:
         model = NonTeachingStaff
@@ -17,5 +20,8 @@ class NonTeachingStaffSerializer(serializers.ModelSerializer):
                     "state",
                     "country",
                     "school_id",
-                    "user_id"
+                    "school_name",
+                    "user_id",
+                    "user_first_name",
+                    "user_last_name"
                     ]

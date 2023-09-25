@@ -5,7 +5,9 @@ from urllib.parse import urlparse
 
 class CourseMaterialSerializer(serializers.ModelSerializer):
     course_id = serializers.UUIDField()
+    course_name = serializers.CharField(source="course.course_name", read_only=True)  
     school_id = serializers.UUIDField()
+    school_name = serializers.CharField(source="school.school_name", read_only=True)
 
     class Meta:
         model = CourseMaterial
@@ -13,7 +15,9 @@ class CourseMaterialSerializer(serializers.ModelSerializer):
                   "course_material_name",
                   "course_material_file",
                   "course_id",
-                  "school_id"
+                    "course_name",
+                  "school_id",
+                    "school_name"
                   ]
         
     def to_representation(self, instance):

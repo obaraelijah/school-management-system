@@ -15,6 +15,7 @@ class CreateListCourse(APIView):
         serializer = CourseSerializer(courses, many=True)
         response = {
             "status": "success",
+            "message": "All Courses Retrieved Successfully",
             "data": serializer.data
         }
         return Response(response, status=status.HTTP_200_OK)
@@ -52,6 +53,7 @@ class RetrieveUpdateDeleteCourse(APIView):
         serializer = CourseSerializer(course)
         response = {
             "status": "success",
+            "message": "Course Retrieved Successfully",
             "data": serializer.data
         }
         return Response(response, status=status.HTTP_200_OK)

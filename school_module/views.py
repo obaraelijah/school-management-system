@@ -26,8 +26,18 @@ class CreateAndListSchool(APIView):
         serializer = SchoolSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            response = {
+                "status": "success",
+                "message": "School Created Successfully",
+                "data": serializer.data
+            }
+            return Response(response, status=status.HTTP_201_CREATED)
+        bad_request_response = {
+            "status": "failed",
+            "message": "School Creation Failed",
+            "data": serializer.errors
+        }
+        return Response(bad_request_response, status=status.HTTP_400_BAD_REQUEST)
        
     def get(self, request: Request):
         """
@@ -35,7 +45,12 @@ class CreateAndListSchool(APIView):
         """
         queryset = School.objects.all()
         serializer = SchoolSerializer(instance=queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        response = {
+            "status": "success",
+            "message": "All Schools Retrieved Successfully",
+            "data": serializer.data
+        }
+        return Response(response, status=status.HTTP_200_OK)
 
 
 class RetrieveUpdateDeleteSchool(APIView):
@@ -55,9 +70,18 @@ class RetrieveUpdateDeleteSchool(APIView):
         try:
             queryset = School.objects.get(pk=pk)
         except School.DoesNotExist:
-            return Response({"error": "School not found"}, status=status.HTTP_404_NOT_FOUND)
+            not_found_response = {
+                "status": "failed",
+                "message": "School not found"
+            }
+            return Response(not_found_response, status=status.HTTP_404_NOT_FOUND)
         serializer = SchoolSerializer(instance=queryset)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        response = {
+            "status": "success",
+            "message": "School Retrieved Successfully",
+            "data": serializer.data
+        }
+        return Response(response, status=status.HTTP_200_OK)
     
     def put(self, request: Request, pk):
         """
@@ -66,14 +90,28 @@ class RetrieveUpdateDeleteSchool(APIView):
         try:
             queryset = School.objects.get(pk=pk)
         except School.DoesNotExist:
-            return Response({"error": "School not found"}, status=status.HTTP_404_NOT_FOUND)
+            not_found_response = {
+                "status": "failed",
+                "message": "School not found"
+            }
+            return Response(not_found_response, status=status.HTTP_404_NOT_FOUND)
         
         data = request.data
         serializer = SchoolSerializer(instance=queryset, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            response = {
+                "status": "success",
+                "message": "School Updated Successfully",
+                "data": serializer.data
+            }
+            return Response(response, status=status.HTTP_202_ACCEPTED)
+        bad_request_response = {
+            "status": "failed",
+            "message": "School Update Failed",
+            "data": serializer.errors
+        }
+        return Response(bad_request_response, status=status.HTTP_400_BAD_REQUEST)
     
     def delete(self, request: Request, pk):
         """
@@ -82,9 +120,17 @@ class RetrieveUpdateDeleteSchool(APIView):
         try:
             queryset = School.objects.get(pk=pk)
         except School.DoesNotExist:
-            return Response({"error": "School not found"}, status=status.HTTP_404_NOT_FOUND)
+            not_found_response = {
+                "status": "failed",
+                "message": "School not found"
+            }
+            return Response(not_found_response, status=status.HTTP_404_NOT_FOUND)
         queryset.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        response = {
+            "status": "success",
+            "message": "School Deleted Successfully"
+        }
+        return Response(response, status=status.HTTP_204_NO_CONTENT)
     
 
 class UpdateSchoolLogo(APIView):
@@ -102,14 +148,28 @@ class UpdateSchoolLogo(APIView):
         try:
             queryset = School.objects.get(pk=pk)
         except School.DoesNotExist:
-            return Response({"error": "School not found"}, status=status.HTTP_404_NOT_FOUND)
+            not_found_response = {
+                "status": "failed",
+                "message": "School not found"
+            }
+            return Response(not_found_response, status=status.HTTP_404_NOT_FOUND)
         
         data = request.data
         serializer = SchoolUpdateLogoSerializer(instance=queryset, data=data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            response = {
+                "status": "success",
+                "message": "School Logo Updated Successfully",
+                "data": serializer.data
+            }
+            return Response(response, status=status.HTTP_202_ACCEPTED)
+        bad_request_response = {
+            "status": "failed",
+            "message": "School Logo Update Failed",
+            "data": serializer.errors
+        }
+        return Response(bad_request_response, status=status.HTTP_400_BAD_REQUEST)
     
 
 

@@ -14,7 +14,12 @@ class CreateListDepartment(APIView):
     def get(self, request: Request):
         departments = Department.objects.all()
         serializer = DepartmentSerializer(departments, many=True)
-        return Response(serializer.data)
+        response = {
+            "status": "success",
+            "message": "All Departments Retrieved Successfully",
+            "data": serializer.data
+        }
+        return Response(response, status=status.HTTP_200_OK)
 
     def post(self, request: Request):
         serializer = DepartmentSerializer(data=request.data)
@@ -49,6 +54,7 @@ class RetrieveUpdateDeleteDepartment(APIView):
         serializer = DepartmentSerializer(department)
         response = {
             "status": "success",
+            "message": "Department Retrieved Successfully",
             "data": serializer.data
         }
         return Response(response, status=status.HTTP_200_OK)

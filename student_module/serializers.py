@@ -9,8 +9,14 @@ from teacher_module.models import Teacher
 
 class StudentSerializer(serializers.ModelSerializer):
     user_id = serializers.UUIDField()
+    user_first_name = serializers.CharField(source="user.first_name", read_only=True)
+    user_last_name = serializers.CharField(source="user.last_name", read_only=True)
     school_id = serializers.UUIDField()
-    
+    school_name = serializers.CharField(source="school.school_name", read_only=True)
+    department_id = serializers.UUIDField()
+    department_name = serializers.CharField(source="department.department_name", read_only=True)
+    courses = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all(), many=True)
+    teachers = serializers.PrimaryKeyRelatedField(queryset=Teacher.objects.all(), many=True)
     class Meta:
         model = Student
         fields = ["student_id",
@@ -23,7 +29,14 @@ class StudentSerializer(serializers.ModelSerializer):
                     "state",
                     "country",
                     "school_id",
-                    "user_id"
+                    "school_name",
+                    "user_id",
+                    "user_first_name",
+                    "user_last_name",
+                    "department_id",
+                    "department_name",
+                    "courses",
+                    "teachers",
                     ]
 
 

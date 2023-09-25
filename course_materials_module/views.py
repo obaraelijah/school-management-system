@@ -16,6 +16,7 @@ class CreateListCourseMaterialView(APIView):
         serializer = CourseMaterialSerializer(course_materials, many=True)
         response = {
             "status": "success",
+            "message": "All course materials retrieved successfully",
             "data": serializer.data
         }
         return Response(response, status=status.HTTP_200_OK)
@@ -47,6 +48,7 @@ class RetrieveUpdateDestroyCourseMaterialView(APIView):
             serializer = CourseMaterialSerializer(course_material)
             response = {
                 "status": "success",
+                "message": "Course material retrieved successfully",
                 "data": serializer.data
             }
             return Response(response, status=status.HTTP_200_OK)

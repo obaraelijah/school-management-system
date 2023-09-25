@@ -33,6 +33,7 @@ class SchoolSerializer(serializers.ModelSerializer):
             "school_name",
             "school_email",
             "school_logo",
+            "school_licence_number",
             "school_phone_number",
             "school_address",
             "school_city",

@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from .managers import CustomUserManager
 import uuid
+from school_module.models import School
 
 
 class Role(models.Model):
@@ -20,6 +21,7 @@ class CustomUser(AbstractUser):
     reset_password_token = models.UUIDField(default=uuid.uuid4)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    school = models.ForeignKey(School, on_delete=models.PROTECT, null=True, blank=True)
     role = models.ForeignKey(Role, on_delete=models.PROTECT)
 
     USERNAME_FIELD = "email"

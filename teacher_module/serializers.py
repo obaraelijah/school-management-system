@@ -5,7 +5,12 @@ from department_module.models import Department
 
 class TeacherSerializer(serializers.ModelSerializer):
     department = serializers.PrimaryKeyRelatedField(queryset=Department.objects.all(), many=True)
-
+    school_id = serializers.UUIDField()
+    user_id = serializers.UUIDField()
+    school_name = serializers.CharField(source='school.school_name', read_only=True)
+    user_first_name = serializers.CharField(source='user.first_name', read_only=True)
+    user_last_name = serializers.CharField(source='user.last_name', read_only=True)
+    
     class Meta:
         model = Teacher
         fields = ["teacher_id",
@@ -20,8 +25,11 @@ class TeacherSerializer(serializers.ModelSerializer):
                   "state",
                   "country",
                   "school_id",
+                  "school_name",
                   "user_id",
-                  "department"
+                  "user_first_name",
+                  "user_last_name",
+                  "department"   
                 ]
 
 

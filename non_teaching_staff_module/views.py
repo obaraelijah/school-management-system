@@ -16,6 +16,7 @@ class CreateListNonTeachingStaffView(APIView):
         serializer = NonTeachingStaffSerializer(non_teaching_staff, many=True)
         response = {
             "status": "success",
+            "message": "All Non teaching staffs retrieved successfully",
             "data": serializer.data
         }
         return Response(response, status=status.HTTP_200_OK)
@@ -47,6 +48,7 @@ class RetrieveUpdateDestroyNonTeachingStaffView(APIView):
             serializer = NonTeachingStaffSerializer(non_teaching_staff)
             response = {
                 "status": "success",
+                "message": "Non teaching staff retrieved successfully",
                 "data": serializer.data
             }
             return Response(response, status=status.HTTP_200_OK)

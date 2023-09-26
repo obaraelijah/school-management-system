@@ -9,3 +9,9 @@ class Department(models.Model):
     school = models.ForeignKey(School, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["department_name"]
+    
+    def __str__(self) -> str:
+        return self.department_name

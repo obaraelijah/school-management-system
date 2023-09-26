@@ -7,6 +7,8 @@ from .models import School
 from accounts.models import Role, CustomUser
 from .serializers import SchoolSerializer, SchoolUpdateLogoSerializer
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 
 class CreateAndListSchool(APIView):
@@ -18,6 +20,14 @@ class CreateAndListSchool(APIView):
     """
     permission_classes = [IsAdminUser]
 
+    @swagger_auto_schema(
+        operation_summary=" Admin Create a new school",
+        request_body=SchoolSerializer,
+        responses={
+            201: "School created successfully",
+            400: 'Bad Request',
+            403: 'User Not Authorized to perform action'},
+    ) 
     def post(self, request: Request):
         """
         POST method to create a new school.
@@ -38,7 +48,14 @@ class CreateAndListSchool(APIView):
             "data": serializer.errors
         }
         return Response(bad_request_response, status=status.HTTP_400_BAD_REQUEST)
-       
+
+    @swagger_auto_schema(
+        operation_summary="Admin retrieve all schools",
+        responses={
+            200: "All Schools  retrived successfully",
+            400: 'Bad Request',
+            403: 'User Not Authorized to perform action'},
+    )  
     def get(self, request: Request):
         """
         GET method to retrieve a list of all schools.
@@ -63,10 +80,27 @@ class RetrieveUpdateDeleteSchool(APIView):
     """
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_summary="School Admin Can retrieve their specific school",
+        responses={
+            200: "School Retrieved successfully",
+            404: 'School not found',
+            403: 'User Not Authorized to perform action'},
+    ) 
     def get(self, request: Request, pk):
         """
         GET method to retrieve detailed information about a specific school by using it's id.
         """
+        user =  request.user
+        role = Role.objects.filter(role_id=user.role_id).first()
+        role_name = role.role_name
+        if role_name != "SCHOOLADMIN" and "superuser":
+            forbideen_response = {
+                "status": "failed",
+                "message": "user not authorized to perform this action"
+            }
+            return Response(forbideen_response, status=status.HTTP_403_FORBIDDEN)
+
         try:
             queryset = School.objects.get(pk=pk)
         except School.DoesNotExist:
@@ -83,10 +117,29 @@ class RetrieveUpdateDeleteSchool(APIView):
         }
         return Response(response, status=status.HTTP_200_OK)
     
+    @swagger_auto_schema(
+        operation_summary="School Admin Can update their specific school",
+        request_body=SchoolSerializer,
+        responses={
+            200: "School updated successfully",
+            400: 'Bad Request',
+            403: 'User Not Authorized to perform action',
+            404: 'School not found'},
+    ) 
     def put(self, request: Request, pk):
         """
         PUT method to update school information (allows partial updates) by using it's id.
         """
+        user =  request.user
+        role = Role.objects.filter(role_id=user.role_id).first()
+        role_name = role.role_name
+        if role_name != "SCHOOLADMIN" and "superuser":
+            forbideen_response = {
+                "status": "failed",
+                "message": "user not authorized to perform this action"
+            }
+            return Response(forbideen_response, status=status.HTTP_403_FORBIDDEN)
+
         try:
             queryset = School.objects.get(pk=pk)
         except School.DoesNotExist:
@@ -105,7 +158,7 @@ class RetrieveUpdateDeleteSchool(APIView):
                 "message": "School Updated Successfully",
                 "data": serializer.data
             }
-            return Response(response, status=status.HTTP_202_ACCEPTED)
+            return Response(response, status=status.HTTP_200_OK)
         bad_request_response = {
             "status": "failed",
             "message": "School Update Failed",
@@ -113,10 +166,27 @@ class RetrieveUpdateDeleteSchool(APIView):
         }
         return Response(bad_request_response, status=status.HTTP_400_BAD_REQUEST)
     
+    @swagger_auto_schema(
+        operation_summary="School Admin Can delete their specific school",
+        responses={
+            204: "School deleted successfully",
+            403: 'User Not Authorized to perform action',
+            404: 'School not found'},
+    )
     def delete(self, request: Request, pk):
         """
         DELETE method to delete a specific school using it's id.
         """
+        user =  request.user
+        role = Role.objects.filter(role_id=user.role_id).first()
+        role_name = role.role_name
+        if role_name != "SCHOOLADMIN" and "superuser":
+            forbideen_response = {
+                "status": "failed",
+                "message": "user not authorized to perform this action"
+            }
+            return Response(forbideen_response, status=status.HTTP_403_FORBIDDEN)
+
         try:
             queryset = School.objects.get(pk=pk)
         except School.DoesNotExist:
@@ -141,10 +211,29 @@ class UpdateSchoolLogo(APIView):
     """
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_summary="School Admin Can update their specific school logo",
+        request_body=SchoolUpdateLogoSerializer,
+        responses={
+            200: "school logo updated successfully",
+            400: 'Bad Request',
+            403: 'User Not Authorized to perform action',
+            404: 'School not found'},
+    )
     def put(self, request: Request, pk):
         """
         PUT method to update the school's logo.
         """
+        user =  request.user
+        role = Role.objects.filter(role_id=user.role_id).first()
+        role_name = role.role_name
+        if role_name != "SCHOOLADMIN" and "superuser":
+            forbideen_response = {
+                "status": "failed",
+                "message": "user not authorized to perform this action"
+            }
+            return Response(forbideen_response, status=status.HTTP_403_FORBIDDEN)
+
         try:
             queryset = School.objects.get(pk=pk)
         except School.DoesNotExist:
@@ -163,7 +252,7 @@ class UpdateSchoolLogo(APIView):
                 "message": "School Logo Updated Successfully",
                 "data": serializer.data
             }
-            return Response(response, status=status.HTTP_202_ACCEPTED)
+            return Response(response, status=status.HTTP_200_OK)
         bad_request_response = {
             "status": "failed",
             "message": "School Logo Update Failed",

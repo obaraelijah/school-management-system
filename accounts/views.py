@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.request import Request
@@ -11,6 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 import uuid
 from rest_framework_simplejwt.views import TokenObtainPairView
 from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 from school_module.models import School
 from department_module.models import Department
 
@@ -230,6 +230,7 @@ class CreateUsers(APIView):
                 "message": "User Not Authorized to perform action"
             }
             return Response(response, status=status.HTTP_403_FORBIDDEN)
+        
         data = request.data
         serializer = CustomUserSerializer(data=data)
         if serializer.is_valid():
@@ -324,7 +325,7 @@ class ListUsers(APIView):
 
     GET: List all user accounts (requires admin authentication).
     """
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
         operation_summary="School Admin Can list all user accounts",
@@ -337,6 +338,16 @@ class ListUsers(APIView):
         """
         GET method to list all user accounts (requires admin authentication).
         """
+        user =  request.user
+        role = Role.objects.filter(role_id=user.role_id).first()
+        role_name = role.role_name
+        if role_name != "SCHOOLADMIN" and "superuser":
+            forbideen_response = {
+                "status": "failed",
+                "message": "user not authorized to perform this action"
+            }
+            return Response(forbideen_response, status=status.HTTP_403_FORBIDDEN)
+
         queryset = CustomUser.objects.all()
         serializer = CustomUserSerializer(instance=queryset, many=True)
         response = {
@@ -477,12 +488,26 @@ class UserConfirmEmailAddress(APIView):
     """
     permission_classes = [AllowAny]
 
+    email_param = openapi.Parameter(
+        name="email",
+        in_=openapi.IN_QUERY,
+        type=openapi.TYPE_STRING,
+        description="Email address of the user",
+    )
+
+    token_param = openapi.Parameter(
+        name="token",
+        in_=openapi.IN_QUERY,
+        type=openapi.TYPE_STRING,
+        description="Confirmation token",
+    )
+
     @swagger_auto_schema(
         operation_summary="New user can confirm their email address",
+        manual_parameters=[email_param, token_param],
         responses={
             200: "User account confirmed successfully",
-            400: 'Bad Request',
-            403: 'User Not Authorized'},
+            400: 'Bad Request'},
     )
     def get(self, request: Request):
         """
@@ -631,5 +656,5 @@ class UserResetPassword(APIView):
             "status": "failed",
             "message": "Account update failed",
             "error_message": serializer.errors
-        }    
+        }   
         return Response(bad_request_response, status=status.HTTP_400_BAD_REQUEST)

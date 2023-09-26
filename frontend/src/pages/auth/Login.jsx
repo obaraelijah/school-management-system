@@ -7,8 +7,6 @@ import { baseUrl } from '../../consts';
 import useAuthState from '../../hooks/useAuth';
 import { MoonLoader } from 'react-spinners';
 import { Navigate, useNavigate } from 'react-router-dom';
-import fetchUser from '../../utils/fetchUser';
-import getUserIdFromToken from '../../utils/getUserId';
 
 const LogIn = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -39,11 +37,10 @@ const LogIn = () => {
       const res = await response.json();
       if (response.ok) {
         localStorage.setItem('auth', JSON.stringify(res));
-        const user_id = getUserIdFromToken();
-        const user = fetchUser(user_id);
+        const user = res.data;
         setUser(user);
         toast.success('signed in!');
-        navigate(`/dashboard/${user.role_name}`);
+        navigate(`/dashboard/${user.role.toLowerCase()}`);
       } else {
         console.log('error');
         toast.error(res.detail);
@@ -56,7 +53,7 @@ const LogIn = () => {
     }
   };
 
-  if (user) return <Navigate to={`/dashboard/${user.role_name}`} />;
+  if (user) return <Navigate to={`/dashboard/${user.role}`} replace />;
 
   return (
     <div className='flex flex-col justify-center items-center gap-6 w-full  my-8 bg-[url("../src/assets/girl.png")] py-20 bg-contain bg-no-repeat bg-right-bottom relative'>

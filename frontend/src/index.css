@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply scroll-smooth relative bg-background text-white
+  @apply scroll-smooth relative bg-background text-black
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */

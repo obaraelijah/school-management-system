@@ -1,7 +1,10 @@
+import NewUser from '../../components/NewUser';
+
 const RegisterStudent = () => {
   return (
     <div>
-      <h2>register student</h2>
+      <h2 className='capitalize py-2 font-bold'>register student</h2>
+      <NewUser />
     </div>
   );
 };

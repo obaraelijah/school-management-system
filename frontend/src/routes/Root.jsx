@@ -34,7 +34,7 @@ const Root = (
     <Route
       element={
         <RequireAuth
-          allowedRoles={['admin', 'student', 'teacher', 'superuser']}
+          allowedRoles={['schooladmin', 'student', 'teacher', 'superuser']}
         />
       }
     >
@@ -45,7 +45,10 @@ const Root = (
         {/* end */}
 
         {/* school admin allowed routes */}
-        <Route path='admin' element={<RequireAuth allowedRoles={['admin']} />}>
+        <Route
+          path='schooladmin'
+          element={<RequireAuth allowedRoles={['schooladmin']} />}
+        >
           <Route index element={<AdminDashBoard />} />
           <Route path='new_teacher' element={<RegisterTeacher />} />
           <Route path='new_student' element={<RegisterStudent />} />

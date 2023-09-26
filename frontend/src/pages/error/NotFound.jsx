@@ -2,7 +2,6 @@
 
 import { Link, useNavigate } from 'react-router-dom';
 import Button from '../../components/Button';
-import { Flex } from '@chakra-ui/react';
 
 const NotFound = () => {
   const navigate = useNavigate();
@@ -14,7 +13,7 @@ const NotFound = () => {
         we&#39;re sorry. the page you requested could not be found Please go
         back to the home page
       </p>
-      <Flex gap={3} alignItems={'center'}>
+      <section className='flex items-center gap-3'>
         <Link
           to={'/'}
           className='capitalize bg-btn px-7 py-2 rounded-xl text-xl'
@@ -27,7 +26,7 @@ const NotFound = () => {
         >
           go back
         </Button>
-      </Flex>
+      </section>
     </main>
   );
 };

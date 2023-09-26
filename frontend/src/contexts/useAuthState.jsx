@@ -1,19 +1,13 @@
 import PropTypes from 'prop-types';
-import { createContext, useEffect, useState } from 'react';
-import fetchUser from '../utils/fetchUser';
-import getUserIdFromToken from '../utils/getUserId';
+import { createContext, useState } from 'react';
+import getUserFromStorage from '../utils/getUserId';
 
 const AuthContext = createContext(null);
 
-export const AuthStateProvider = ({ children }) => {
-  const user_id = getUserIdFromToken();
-  const [user, setUser] = useState(null);
+const initialState = getUserFromStorage();
 
-  useEffect(() => {
-    if (user_id) {
-      fetchUser(user_id).then((res) => setUser(res));
-    }
-  }, []);
+export const AuthStateProvider = ({ children }) => {
+  const [user, setUser] = useState(initialState);
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>

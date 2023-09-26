@@ -1,4 +1,4 @@
-import { Button } from '@chakra-ui/react';
+import Button from './Button';
 import { CgSearch } from 'react-icons/cg';
 
 const Search = () => {
@@ -18,7 +18,7 @@ const Search = () => {
             placeholder='search'
           />
         </label>
-        <Button>search</Button>
+        <Button className=''>search</Button>
       </form>
     </div>
   );

@@ -1,7 +1,10 @@
+import NewUser from '../../components/NewUser';
+
 const RegisterTeacher = () => {
   return (
     <div>
-      <h2>register teacher</h2>
+      <h2>Register Teacher</h2>
+      <NewUser />
     </div>
   );
 };

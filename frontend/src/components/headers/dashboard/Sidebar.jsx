@@ -8,13 +8,15 @@ import useAuthState from '../../../hooks/useAuth';
 
 const Sidebar = () => {
   const { user, setUser } = useAuthState();
-  const superAdmin = user.role_name === 'superuser';
-  const admin = user.role_name === 'admin';
+  const role = user.role.toLowerCase();
+  const superAdmin = role === 'superuser';
+  const admin = role === 'schooladmin';
   //const teacher = user.role_name === 'teacher';
   //const student = user.role_name ==='student';
   const navigate = useNavigate();
   const handleSignOut = () => {
     setUser(null);
+    localStorage.removeItem('auth');
     navigate('/login');
   };
 
@@ -26,7 +28,7 @@ const Sidebar = () => {
           <ul className='flex gap-7 flex-col justify-center'>
             <li>
               <NavLink
-                to={`/dashboard/${user.role_name}`}
+                to={`/dashboard/${role}`}
                 className={`${({ isActive }) =>
                   isActive ? 'dashboard-active' : ''} dashboard-link`}
               >
@@ -38,7 +40,7 @@ const Sidebar = () => {
               <>
                 <li>
                   <NavLink
-                    to={'/dashboard/admin/new_teacher'}
+                    to={'/dashboard/schooladmin/new_teacher'}
                     className={`${({ isActive }) =>
                       isActive ? 'dashboard-active' : ''} dashboard-link`}
                   >
@@ -47,7 +49,7 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <NavLink
-                    to={'/dashboard/admin/new_student'}
+                    to={'/dashboard/schooladmin/new_student'}
                     className={`${({ isActive }) =>
                       isActive ? 'dashboard-active' : ''} dashboard-link`}
                   >

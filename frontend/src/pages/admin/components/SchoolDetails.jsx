@@ -22,8 +22,23 @@ const SchoolDetails = () => {
       school_country: '',
       school_state: '',
       school_postal_code: '',
+      school_licence_number: '',
     },
   });
+
+  const schools = async () => {
+    try {
+      // const res = await authRequest.get('schools/');
+      // const roles = await authRequest.get('roles/');
+      const users = await authRequest.get('users/');
+      // console.log(res);
+      // console.log(roles);
+      console.log(users);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  schools();
 
   const convertFile = (file) => {
     const reader = new FileReader();
@@ -48,6 +63,7 @@ const SchoolDetails = () => {
     formData.append('school_postal_code', data.school_postal_code);
     formData.append('school_country', data.school_country);
     formData.append('school_state', data.school_state);
+    formData.append('school_licence_number', data.school_licence_number);
 
     try {
       const res = await authRequest.post('schools/', formData);
@@ -176,11 +192,22 @@ const SchoolDetails = () => {
             />
 
             <Input
+              name='school_licence_number'
+              register={register}
+              className={'input'}
+              error={errors.school_licence_number}
+              label={'licence number'}
+              options={{
+                required: 'please provide school licence number',
+              }}
+              placeholder={'licence number'}
+            />
+            <Input
               name='school_postal_code'
               register={register}
               className={'input'}
               error={errors.school_postal_code}
-              label={'school school_postal_code'}
+              label={'school postal code'}
               options={{
                 required: 'please provide school postal code',
               }}

@@ -1,0 +1,35 @@
+/* Add your custom styles here */
+.contact-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px;
+    background-color: #f8f8f8;
+  }
+  
+  .contact-content {
+    flex: 1;
+    padding: 20px;
+  }
+  
+  .contact-content h1 {
+    font-size: 32px;
+    margin-bottom: 20px;
+  }
+  
+  .contact-content p {
+    font-size: 18px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+  
+  .contact-details p {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  .contact-image img {
+    max-width: 100%;
+    height: auto;
+  }
+  

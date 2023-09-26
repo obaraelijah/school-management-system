@@ -21,6 +21,9 @@ import RootLayout from './components/layouts/RootLayout.jsx';
 import AdminLayout from './components/layouts/AdminLayout.jsx';
 import Admin from './pages/admin/Admin.jsx';
 import ForgotPassword from './pages/auth/ForgotPassword.jsx';
+import UserRoles from './components/UserRoles';
+import StudentRegistration from './components/StudentRegistration';
+import TeacherRegistration from './components/TeacherRegistration';
 
 const queryClient = new QueryClient();
 
@@ -31,7 +34,7 @@ const router = createBrowserRouter(
         <Route index element={<Home />} />
         <Route path='signup' element={<SignUp />} />
         <Route path='login' element={<LogIn />} />
-        <Route path='forgot-password' element={<ForgotPassword/>}/>
+        <Route path='forgot-password' element={<ForgotPassword />} />
         <Route path='/about' element={<About />} />
         <Route path='/contact' element={<Contact />} />
       </Route>
@@ -39,10 +42,16 @@ const router = createBrowserRouter(
       <Route path='dashboard' element={<DashboardLayout />}>
         <Route index element={<DashBoard />} />
       </Route>
+
       <Route path='admin' element={<AdminLayout />}>
         <Route index element={<Admin />} />
         <Route path='new-school' element={<SchoolInfo />} />
       </Route>
+
+      {/* Add the routes here without nesting */}
+      <Route path='/user-roles' element={<UserRoles />} />
+      <Route path='/student-registration' element={<StudentRegistration />} />
+      <Route path='/teacher-registration' element={<TeacherRegistration />} />
     </Route>
   )
 );

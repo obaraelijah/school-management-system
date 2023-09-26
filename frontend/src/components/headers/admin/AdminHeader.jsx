@@ -21,14 +21,14 @@ const AdminHeader = () => {
 
             <li>
               <NavLink to={'/admin/new-school'} className={''}>
-                Add
+                Add school
               </NavLink>
             </li>
-            {/*<li>
-            <NavLink to={} className={``}>
-              
-            </NavLink>
-          </li> */}
+            <li>
+              <NavLink to={''} className={``}>
+                Add Teacher
+              </NavLink>
+            </li>
           </ul>
         </nav>
       </div>

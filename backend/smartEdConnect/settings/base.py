@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,7 +40,14 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'rest_framework',
-    'school.apps.SchoolConfig'
+    'school_module.apps.SchoolModuleConfig',
+    'accounts.apps.AccountsConfig',
+    'department_module.apps.DepartmentModuleConfig',
+    'teacher_module.apps.TeacherModuleConfig',
+    'course_module.apps.CourseModuleConfig',
+    'course_materials_module.apps.CourseMaterialsModuleConfig',
+    'student_module.apps.StudentModuleConfig',
+    'non_teaching_staff_module.apps.NonTeachingStaffModuleConfig',
 ]
 
 MIDDLEWARE = [
@@ -72,6 +80,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "smartEdConnect.wsgi.application"
 
+AUTH_USER_MODEL = "accounts.CustomUser"
+
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -101,6 +111,22 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=2),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),  
+}
+
 
 
 # Internationalization

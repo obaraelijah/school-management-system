@@ -14,7 +14,7 @@ const Input = (props) => {
   return (
     <label
       htmlFor={name}
-      className='block capitalize text-lg text-custom-green-100 pb-3'
+      className='block capitalize text-lg text-word pb-3 w-full'
     >
       {label}
       <input

@@ -1,9 +1,9 @@
-import school from '../../../assets/hero1.webp';
+import school from '../../../assets/image6.png';
 import Button from '../../../components/Button';
 
 const Hero = () => {
   return (
-    <div className='lg:h-[90vh] bg-btn flex flex-col md:flex-row  items-center relative mask'>
+    <div className='lg:py-10 bg-btn flex flex-col md:flex-row  items-center relative mask'>
       <div className='md:w-1/2 px-10 md:p-16'>
         <h1 className='text-2xl font-bold md:text-4xl mb-5 lg:text-5xl text-cm-orange-100'>
           Empowering Schools with Innovative Management

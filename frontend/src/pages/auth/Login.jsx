@@ -42,11 +42,9 @@ const LogIn = () => {
         toast.success('signed in!');
         navigate(`/dashboard/${user.role.toLowerCase()}`);
       } else {
-        console.log('error');
-        toast.error(res.detail);
+        toast.error('invalid credentials!');
       }
     } catch (error) {
-      console.log(error);
       toast.error(error.detail);
     } finally {
       setIsLoading(false);

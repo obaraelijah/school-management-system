@@ -3,22 +3,20 @@ import authRequest from '../config/requests';
 import Input from './forms/Input';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { Modal, Button as AntButton } from 'antd';
+import { Modal, Button as AntButton, Typography, List } from 'antd';
 import { AiOutlineSend } from 'react-icons/ai';
-import { Typography } from 'antd';
 import { MdContentCopy, MdOutlineCheckCircle } from 'react-icons/md';
 import useAuthState from '../hooks/useAuth';
 import useApiQuery from '../hooks/useApiQuery';
 
 const NewUser = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [roleId, setRoleId] = useState('');
   const [isNewRole, setIsNewRole] = useState(false);
 
-  const { Paragraph, Title } = Typography;
+  const { Text } = Typography;
 
-  const { data: roles } = useApiQuery(['roles'], 'roles/');
-
+  const { data, refetch: refetchRoles } = useApiQuery(['roles'], 'roles/');
+  const roles = data.data;
   const {
     register,
     handleSubmit,
@@ -30,7 +28,19 @@ const NewUser = () => {
   });
 
   const { user } = useAuthState();
-  const isSchoolAdmin = user.role_name.toLowerCase() === 'schooladmin';
+  const isSchoolAdmin = user.role.toLowerCase() === 'schooladmin';
+  const isSuperUser = user.role.toLowerCase() === 'superuser';
+
+  const filteredRoles = roles?.filter((role) => {
+    if (isSchoolAdmin) {
+      return !['schooladmin', 'superuser'].includes(
+        role.role_name.toLowerCase()
+      );
+    }
+    return role;
+  });
+
+  //
   const {
     register: registerUser,
     handleSubmit: handleUserSubmit,
@@ -55,7 +65,7 @@ const NewUser = () => {
       const res = await authRequest.post('roles/', data);
       if (res.status === 201) {
         toast.success('role id created successfully!');
-        setRoleId(res.data.data.role_id);
+        refetchRoles();
       } else {
         toast.error('error creating role!');
       }
@@ -81,7 +91,7 @@ const NewUser = () => {
     }
   };
 
-  // handle utton toggle for new role name creation
+  // handle button toggle for new role name creation
   const toggleButton = () => {
     setIsNewRole((prev) => !prev);
   };
@@ -101,11 +111,37 @@ const NewUser = () => {
       >
         <p>user created successfully!</p>
       </Modal>
-      {/* {roleId && (
-        <>
-          <div>
-            <Title>role id:</Title>
-            <Paragraph
+      <div>
+        <h4>Available roles</h4>
+        <List
+          size='small'
+          pagination={false}
+          dataSource={filteredRoles}
+          className='my-3'
+          renderItem={(item) => (
+            <List.Item key={item?.school_id}>
+              <div className='flex items-center gap-5 justify-start'>
+                <h5 className='text-sm'>{item.role_name}</h5>
+                <Text
+                  copyable={{
+                    icon: [
+                      <MdContentCopy key={'copy-icon'} />,
+                      <MdOutlineCheckCircle key={'copied-icon'} />,
+                    ],
+                    tooltips: ['click here to copy', 'copied!'],
+                  }}
+                  className='flex items-center'
+                >
+                  {item.role_id}
+                </Text>
+              </div>
+            </List.Item>
+          )}
+        />
+        {isSchoolAdmin ? (
+          <div className='flex items-center gap-5'>
+            <h4 className='capitalize font-medium'>school id:</h4>
+            <Text
               copyable={{
                 icon: [
                   <MdContentCopy key={'copy-icon'} />,
@@ -114,62 +150,48 @@ const NewUser = () => {
                 tooltips: ['click here to copy', 'copied!'],
               }}
             >
-              {roleId}
-            </Paragraph>
+              {user.school_id}
+            </Text>
           </div>
-          {isSchoolAdmin
-            ? AiOutlineSend(
-                <div>
-                  <Title>school id:</Title>
-                  <Paragraph
-                    copyable={{
-                      icon: [
-                        <MdContentCopy key={'copy-icon'} />,
-                        <MdOutlineCheckCircle key={'copied-icon'} />,
-                      ],
-                      tooltips: ['click here to copy', 'copied!'],
-                    }}
-                  >
-                    {user.school_id}
-                  </Paragraph>
-                </div>
-              )
-            : null}
-        </>
-      )} */}
-
-      <div
-        className={`flex flex-col justify-center px-5 md:px-10 py-4 rounded-md my-5 ${
-          isNewRole && 'border'
-        }`}
-      >
-        <AntButton
-          className={`self-end transition transform ease-in-out duration-75 ${
-            isNewRole && 'text-red-500 border-red-500'
-          }`}
-          onClick={toggleButton}
-        >
-          {isNewRole ? 'close' : 'create role name'}
-        </AntButton>
-
-        {isNewRole && (
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Input
-              name='role_name'
-              register={register}
-              error={errors.role_name}
-              options={{
-                required: 'please provide a role name',
-              }}
-              placeholder={isSchoolAdmin ? 'student or teacher' : 'schooladmin'}
-              className={'input'}
-              label={'role name:'}
-            />
-            <AntButton htmlType='submit'>submit</AntButton>
-          </form>
-        )}
+        ) : null}
       </div>
-      <form onSubmit={handleUserSubmit(createUser)}>
+
+      {isSuperUser && (
+        <div
+          className={`flex flex-col justify-center px-5 md:px-10 py-4 rounded-md my-5 ${
+            isNewRole && 'border'
+          }`}
+        >
+          <AntButton
+            className={`self-end transition transform ease-in-out duration-75 ${
+              isNewRole && 'text-red-500 border-red-500'
+            }`}
+            onClick={toggleButton}
+          >
+            {isNewRole ? 'close' : 'create role name'}
+          </AntButton>
+
+          {isNewRole && (
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Input
+                name='role_name'
+                register={register}
+                error={errors.role_name}
+                options={{
+                  required: 'please provide a role name',
+                }}
+                placeholder={
+                  isSchoolAdmin ? 'student or teacher' : 'schooladmin'
+                }
+                className={'input'}
+                label={'role name:'}
+              />
+              <AntButton htmlType='submit'>submit</AntButton>
+            </form>
+          )}
+        </div>
+      )}
+      <form onSubmit={handleUserSubmit(createUser)} className='my-5'>
         <div className='flex flex-col md:flex-row gap-3'>
           <Input
             name='first_name'

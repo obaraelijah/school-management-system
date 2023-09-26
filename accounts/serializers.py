@@ -12,6 +12,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
     school_id = serializers.UUIDField()
     school_name = serializers.CharField(source='school.school_name', read_only=True)
     role_name = serializers.CharField(source='role.role_name', read_only=True)
+    password = serializers.CharField(write_only=True)
 
     class Meta:
         model = CustomUser

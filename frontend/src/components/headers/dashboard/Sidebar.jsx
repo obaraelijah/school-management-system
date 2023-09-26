@@ -11,6 +11,7 @@ const Sidebar = () => {
   const role = user.role.toLowerCase();
   const superAdmin = role === 'superuser';
   const admin = role === 'schooladmin';
+  const admins = admin || superAdmin;
   //const teacher = user.role_name === 'teacher';
   //const student = user.role_name ==='student';
   const navigate = useNavigate();
@@ -36,24 +37,15 @@ const Sidebar = () => {
                 dashboard
               </NavLink>
             </li>
-            {admin && (
+            {admins && (
               <>
                 <li>
                   <NavLink
-                    to={'/dashboard/schooladmin/new_teacher'}
+                    to={`/dashboard/new_user`}
                     className={`${({ isActive }) =>
                       isActive ? 'dashboard-active' : ''} dashboard-link`}
                   >
-                    register teacher
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to={'/dashboard/schooladmin/new_student'}
-                    className={`${({ isActive }) =>
-                      isActive ? 'dashboard-active' : ''} dashboard-link`}
-                  >
-                    register student
+                    register user
                   </NavLink>
                 </li>
               </>
@@ -68,15 +60,6 @@ const Sidebar = () => {
                       isActive ? 'dashboard-active' : ''} dashboard-link`}
                   >
                     register school
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to={'/dashboard/superuser/new_admin'}
-                    className={`${({ isActive }) =>
-                      isActive ? 'dashboard-active' : ''} dashboard-link`}
-                  >
-                    school admin
                   </NavLink>
                 </li>
               </>

@@ -12,11 +12,9 @@ import Admin from '../pages/admin/Admin.jsx';
 import StudentDashboard from '../pages/students/StudentDashboard.jsx';
 import RequireAuth from '../components/RequireAuth.jsx';
 import Settings from '../pages/settings/Settings.jsx';
-import RegisterTeacher from '../pages/roles/RegisterTeacher.jsx';
-import RegisterStudent from '../pages/roles/RegisterStudent.jsx';
-import RegisterAdmin from '../pages/roles/RegisterAdmin.jsx';
 import NotFound from '../pages/error/NotFound.jsx';
 import SchoolDetails from '../pages/admin/components/SchoolDetails.jsx';
+import RegisterUser from '../pages/roles/RegisterUser.jsx';
 
 const Root = (
   <Route path='/' element={<App />} errorElement={<NotFound />}>
@@ -43,28 +41,30 @@ const Root = (
         <Route path='student' element={<StudentDashboard />} />
 
         {/* end */}
-
-        {/* school admin allowed routes */}
         <Route
-          path='schooladmin'
-          element={<RequireAuth allowedRoles={['schooladmin']} />}
+          element={<RequireAuth allowedRoles={['schooladmin', 'superuser']} />}
         >
-          <Route index element={<AdminDashBoard />} />
-          <Route path='new_teacher' element={<RegisterTeacher />} />
-          <Route path='new_student' element={<RegisterStudent />} />
-        </Route>
-        {/* end */}
+          <Route path='new_user' element={<RegisterUser />} />
 
-        {/* super admin routes */}
-        <Route
-          path='superuser'
-          element={<RequireAuth allowedRoles={['superuser']} />}
-        >
-          <Route index element={<Admin />} />
-          <Route path='new_admin' element={<RegisterAdmin />} />
-          <Route path='new_school' element={<SchoolDetails />} />
+          {/* school admin allowed routes */}
+          <Route
+            path='schooladmin'
+            element={<RequireAuth allowedRoles={['schooladmin']} />}
+          >
+            <Route index element={<AdminDashBoard />} />
+          </Route>
+          {/* end */}
+
+          {/* super admin routes */}
+          <Route
+            path='superuser'
+            element={<RequireAuth allowedRoles={['superuser']} />}
+          >
+            <Route index element={<Admin />} />
+            <Route path='new_school' element={<SchoolDetails />} />
+          </Route>
+          {/* end */}
         </Route>
-        {/* end */}
         <Route path='settings' element={<Settings />} />
       </Route>
     </Route>

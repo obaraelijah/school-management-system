@@ -6,6 +6,9 @@ from rest_framework import status
 from .models import NonTeachingStaff
 from .serializers import NonTeachingStaffSerializer
 from rest_framework.permissions import IsAuthenticated
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+from accounts.models import Role
 
 
 class CreateListNonTeachingStaffView(APIView):

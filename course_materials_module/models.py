@@ -15,3 +15,9 @@ class CourseMaterial(models.Model):
     school = models.ForeignKey(School, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["course_material_name"]
+    
+    def __str__(self) -> str:
+        return self.course_material_name

@@ -19,6 +19,11 @@ from department_module.models import Department
 class ApiStatusView(APIView):
     permission_classes = [AllowAny]
     
+    @swagger_auto_schema(
+        operation_summary="API status",
+        responses={
+            200: "API is running"},
+    )
     def get(self, request):
         response = {"status": "success",
                     "message": "API is running"}
@@ -43,7 +48,6 @@ class CreateListRoles(APIView):
             400: 'Bad Request',
             403: 'User Not Authorized to perform action'},
     )
-    
     def post(self, request: Request):
         """
         POST method to create a new role.
@@ -316,7 +320,6 @@ class UserLoginView(TokenObtainPairView):
                 }
                 return Response(bad_request_response, status=status.HTTP_400_BAD_REQUEST)
         return response
-
 
 
 class ListUsers(APIView):

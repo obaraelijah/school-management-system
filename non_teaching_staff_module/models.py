@@ -17,3 +17,9 @@ class NonTeachingStaff(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["user__first_name"]
+    
+    def __str__(self) -> str:
+        return self.user.first_name + " " + self.user.last_name

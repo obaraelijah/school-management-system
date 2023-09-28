@@ -15,8 +15,8 @@ class StudentSerializer(serializers.ModelSerializer):
     school_name = serializers.CharField(source="school.school_name", read_only=True)
     department_id = serializers.UUIDField()
     department_name = serializers.CharField(source="department.department_name", read_only=True)
-    courses = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all(), many=True, read_only=True)
-    teachers = serializers.PrimaryKeyRelatedField(queryset=Teacher.objects.all(), many=True, read_only=True)
+    # courses = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all(), many=True, read_only=True)
+    # teachers = serializers.PrimaryKeyRelatedField(queryset=Teacher.objects.all(), many=True, read_only=True)
     
     class Meta:
         model = Student
@@ -37,8 +37,8 @@ class StudentSerializer(serializers.ModelSerializer):
             "user_last_name",
             "department_id",
             "department_name",
-            "courses",
-            "teachers",
+            # "courses",
+            # "teachers",
          ]
 
 

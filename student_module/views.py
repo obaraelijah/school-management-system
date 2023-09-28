@@ -8,11 +8,18 @@ from rest_framework.permissions import IsAuthenticated
 from department_module.models import Department
 from teacher_module.models import Teacher
 from course_module.models import Course
+from drf_yasg.utils import swagger_auto_schema
 
 
 class CreateListStudentView(APIView):
     permission_classes = (IsAuthenticated,)
 
+    @swagger_auto_schema(
+        operation_summary="School Admin Can retrieve all students profile",
+        responses={
+            200: "All students  retrived successfully",
+            403: 'User Not Authorized to perform action',}
+    )
     def get(self, request: Request):
         students = Student.objects.all()
         serializer = StudentSerializer(students, many=True)
@@ -23,6 +30,14 @@ class CreateListStudentView(APIView):
         }
         return Response(response, status=status.HTTP_200_OK)
 
+    @swagger_auto_schema(
+        operation_summary="School Admin Can create a student profile",
+        request_body=StudentSerializer,
+        responses={
+            201: "Student profile created successfully",
+            400: 'Bad Request',
+            403: 'User Not Authorized to perform action'},
+    )
     def post(self, request: Request):
         serializer = StudentSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):

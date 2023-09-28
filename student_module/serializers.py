@@ -15,29 +15,31 @@ class StudentSerializer(serializers.ModelSerializer):
     school_name = serializers.CharField(source="school.school_name", read_only=True)
     department_id = serializers.UUIDField()
     department_name = serializers.CharField(source="department.department_name", read_only=True)
-    courses = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all(), many=True)
-    teachers = serializers.PrimaryKeyRelatedField(queryset=Teacher.objects.all(), many=True)
+    courses = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all(), many=True, read_only=True)
+    teachers = serializers.PrimaryKeyRelatedField(queryset=Teacher.objects.all(), many=True, read_only=True)
+    
     class Meta:
         model = Student
-        fields = ["student_id",
-                  "student_id_number",
-                    "phone_number",
-                    "date_of_birth",
-                    "gender",
-                    "street_address",
-                    "city",
-                    "state",
-                    "country",
-                    "school_id",
-                    "school_name",
-                    "user_id",
-                    "user_first_name",
-                    "user_last_name",
-                    "department_id",
-                    "department_name",
-                    "courses",
-                    "teachers",
-                    ]
+        fields = [
+            "student_id",
+            "student_id_number",
+            "phone_number",
+            "date_of_birth",
+            "gender",
+            "street_address",
+            "city",
+            "state",
+            "country",
+            "school_id",
+            "school_name",
+            "user_id",
+            "user_first_name",
+            "user_last_name",
+            "department_id",
+            "department_name",
+            "courses",
+            "teachers",
+         ]
 
 
 class StudentSubmitAssignmentSerializer(serializers.ModelSerializer):

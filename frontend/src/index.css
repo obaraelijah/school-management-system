@@ -58,6 +58,10 @@ body {
   background-size: _, 1rem, 10px, 10px, 1rem;
 }
 
+tbody tr {
+  cursor: pointer;
+}
+
 @media screen and (min-width: 765px) {
   .link {
     @apply px-12

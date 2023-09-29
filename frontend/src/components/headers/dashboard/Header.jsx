@@ -6,11 +6,11 @@ const Header = () => {
   const { user } = useAuthState();
 
   return (
-    <div>
-      <header className={'flex justify-center item-center '}>
+    <div className=''>
+      <header className={'flex justify-between item-center '}>
         <Search />
         <div className={'flex justify-end'}>
-          <LetteredAvatar name={'John Doe'} />
+          <LetteredAvatar name={`${user?.first_name} ${user?.last_name}`} />
         </div>
       </header>
 

@@ -2,18 +2,20 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { AiOutlineHome } from 'react-icons/ai';
 import { IoSettingsOutline } from 'react-icons/io5';
 import { TbLogout2 } from 'react-icons/tb';
+import { GiArchiveRegister } from 'react-icons/gi';
+import { FcDepartment } from 'react-icons/fc';
 import Logo from '../../Logo';
 import Button from '../../Button';
 import useAuthState from '../../../hooks/useAuth';
 
 const Sidebar = () => {
   const { user, setUser } = useAuthState();
-  const role = user.role.toLowerCase();
+  const role = user?.role.toLowerCase();
   const superAdmin = role === 'superuser';
   const admin = role === 'schooladmin';
   const admins = admin || superAdmin;
-  //const teacher = user.role_name === 'teacher';
-  //const student = user.role_name ==='student';
+  //const teacher = role === 'teacher';
+  //const student = role ==='student';
   const navigate = useNavigate();
   const handleSignOut = () => {
     setUser(null);
@@ -37,15 +39,32 @@ const Sidebar = () => {
                 dashboard
               </NavLink>
             </li>
+            {/* superuser and school admins have access */}
             {admins && (
               <>
                 <li>
                   <NavLink
-                    to={`/dashboard/new_user`}
+                    to={`/dashboard/register?tab=user`}
                     className={`${({ isActive }) =>
-                      isActive ? 'dashboard-active' : ''} dashboard-link`}
+                      isActive ? 'bg-active' : ''}  dashboard-link`}
                   >
+                    <GiArchiveRegister className='icon' />
                     register user
+                  </NavLink>
+                </li>
+              </>
+            )}
+
+            {admin && (
+              <>
+                <li>
+                  <NavLink
+                    to={`/dashboard/schooladmin/departments?tab=all`}
+                    className={`${({ isActive }) =>
+                      isActive ? 'bg-active' : ''}  dashboard-link`}
+                  >
+                    <FcDepartment className='icon' />
+                    departments
                   </NavLink>
                 </li>
               </>

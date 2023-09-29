@@ -15,6 +15,8 @@ import Settings from '../pages/settings/Settings.jsx';
 import NotFound from '../pages/error/NotFound.jsx';
 import SchoolDetails from '../pages/admin/components/SchoolDetails.jsx';
 import RegisterUser from '../pages/roles/RegisterUser.jsx';
+import StudentDetails from '../pages/students/components/StudentDetails.jsx';
+import Departments from '../pages/dashboard/Departments.jsx';
 
 const Root = (
   <Route path='/' element={<App />} errorElement={<NotFound />}>
@@ -40,11 +42,13 @@ const Root = (
         {/* student allowed routes */}
         <Route path='student' element={<StudentDashboard />} />
 
+        <Route path='student/:id' element={<StudentDetails />} />
+
         {/* end */}
         <Route
           element={<RequireAuth allowedRoles={['schooladmin', 'superuser']} />}
         >
-          <Route path='new_user' element={<RegisterUser />} />
+          <Route path='register' element={<RegisterUser />} />
 
           {/* school admin allowed routes */}
           <Route
@@ -52,6 +56,7 @@ const Root = (
             element={<RequireAuth allowedRoles={['schooladmin']} />}
           >
             <Route index element={<AdminDashBoard />} />
+            <Route path='departments' element={<Departments />} />
           </Route>
           {/* end */}
 

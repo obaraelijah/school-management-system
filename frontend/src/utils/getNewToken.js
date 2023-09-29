@@ -7,12 +7,12 @@ const fetchToken = async () => {
     const res = await axios.post(`${baseUrl}refresh_token/`, {
       refresh: auth.refresh,
     });
-
+    console.log(res);
     const token = await res.data;
     const new_auth = { ...auth, access: token.access };
     localStorage.setItem('auth', JSON.stringify(new_auth));
   } catch (error) {
-    console.log(error.detail);
+    console.log(error);
   }
 };
 

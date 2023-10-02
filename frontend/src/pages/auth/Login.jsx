@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { baseUrl } from '../../consts';
 import useAuthState from '../../hooks/useAuth';
 import { MoonLoader } from 'react-spinners';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 const LogIn = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -54,17 +54,19 @@ const LogIn = () => {
   if (user) return <Navigate to={`/dashboard/${user.role}`} replace />;
 
   return (
-    <div className='flex flex-col justify-center items-center gap-6 w-full  my-8 bg-[url("../src/assets/girl.png")] py-20 bg-contain bg-no-repeat bg-right-bottom relative'>
+    <div className='flex flex-col gap-6 w-full items-center md:justify-center py-20 relative bg-[url("../src/assets/trianglify-lowres.png")] px-2 h-screen bg-no-repeat bg-cover'>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className={`${
           isLoading ? 'opacity-50' : ''
-        } md:w-1/4 flex flex-col bg-form px-4 py-4 rounded-md`}
+        } w-5/6 md:w-2/4 lg:w-1/4 flex flex-col bg-form px-4 py-4 rounded-md`}
       >
         <Input
           name='email'
           register={register}
-          className={'input border w-full'}
+          className={
+            'input border w-full bg-[url("../src/assets/email.svg")] bg-no-repeat bg-pl login'
+          }
           error={errors.email}
           label={'email'}
           options={{
@@ -80,7 +82,9 @@ const LogIn = () => {
         <Input
           name='password'
           register={register}
-          className={'input'}
+          className={
+            'input bg-[url("../src/assets/lock.svg")] bg-no-repeat bg-pl login'
+          }
           error={errors.password}
           label={'password'}
           options={{
@@ -89,19 +93,24 @@ const LogIn = () => {
           placeholder={'enter your password'}
           type={'password'}
         />
+        <Link
+          to={'/forgot_password'}
+          className='text-red-700 py-2 text-right w-fit self-end'
+        >
+          forgot password?
+        </Link>
+        {isLoading && (
+          <div className='self-center'>
+            <MoonLoader color='rgb(0,82,250)' className='z-20' width={500} />
+          </div>
+        )}
         <Button
           type='submit'
-          className='bg-btn w-1/2 rounded-2xl py-2 self-center'
+          className='bg-header text-white capitalize w-1/2 rounded-2xl py-2 self-center btn'
         >
           login
         </Button>
       </form>
-
-      {isLoading && (
-        <div className='fixed'>
-          <MoonLoader color='#000' className='z-20' width={500} />
-        </div>
-      )}
     </div>
   );
 };

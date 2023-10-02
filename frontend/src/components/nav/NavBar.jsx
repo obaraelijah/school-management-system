@@ -2,8 +2,8 @@ import { NavLink } from 'react-router-dom';
 
 const NavBar = () => {
   return (
-    <nav className='text-white hidden md:block'>
-      <ul className='flex gap-7'>
+    <nav className='text-white'>
+      <ul className='flex gap-7 md:flex-row flex-col capitalize'>
         <li>
           <NavLink to={''} className={' '}>
             home

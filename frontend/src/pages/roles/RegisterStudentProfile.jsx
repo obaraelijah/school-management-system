@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import Input from '../../components/forms/Input';
 import useApiMutation from '../../hooks/useApiMutation';
 import { toast } from 'react-toastify';
-import { Button, Radio } from 'antd';
+import { Button } from 'antd';
 import useAuthState from '../../hooks/useAuth';
 
 const RegisterStudentProfile = () => {
@@ -93,35 +93,28 @@ const RegisterStudentProfile = () => {
           className='w-fit px-2 ml-3'
           type={'date'}
         />
-        <div className=''>
-          gender
-          <label htmlFor='male'>
-            <input
-              type='radio'
-              id='male'
-              {...register('gender')}
-              value={'male'}
-            />
-            male
+        <div className='flex items-center gap-3'>
+          <label htmlFor='gender' className='capitalize'>
+            gender
           </label>
-          <label htmlFor='female'>
-            <input
-              type='radio'
-              id='female'
-              {...register('gender')}
-              value={'female'}
-            />
-            female
-          </label>
-          <label htmlFor='others'>
-            <input
-              type='radio'
-              id='other'
-              {...register('gender')}
-              value={'others'}
-            />
-            others
-          </label>
+          <select
+            id='gender'
+            {...register('gender', {
+              required: 'please select one',
+            })}
+            className='input'
+          >
+            <option value=''></option>
+            <option value='male'>male</option>
+            <option value='female'>female</option>
+            <option value='other'>other</option>
+          </select>
+
+          {errors?.gender && (
+            <p className='text-red-500 text-xs pt-1 normal-case italic'>
+              {errors.gender.message}
+            </p>
+          )}
         </div>
       </div>
 
@@ -136,42 +129,43 @@ const RegisterStudentProfile = () => {
         className={'input'}
         placeholder={'street address'}
       />
+      <div className='flex gap-2'>
+        <Input
+          name={'city'}
+          label={'city'}
+          error={errors?.city}
+          register={register}
+          options={{
+            required: 'please enter city',
+          }}
+          className={'input'}
+          placeholder={'city'}
+        />
 
-      <Input
-        name={'city'}
-        label={'ikeja, warri...'}
-        error={errors?.city}
-        register={register}
-        options={{
-          required: 'please enter city',
-        }}
-        className={'input'}
-        placeholder={'city'}
-      />
+        <Input
+          name={'state'}
+          label={'state'}
+          error={errors?.state}
+          register={register}
+          options={{
+            required: 'please enter state',
+          }}
+          className={'input'}
+          placeholder={'lagos,delta,kano'}
+        />
 
-      <Input
-        name={'state'}
-        label={'state'}
-        error={errors?.state}
-        register={register}
-        options={{
-          required: 'please enter state',
-        }}
-        className={'input'}
-        placeholder={'lagos,delta,kano'}
-      />
-
-      <Input
-        name={'country'}
-        label={'country'}
-        error={errors?.country}
-        register={register}
-        options={{
-          required: 'please enter country',
-        }}
-        className={'input'}
-        placeholder={'Nigeria, Ghana,...'}
-      />
+        <Input
+          name={'country'}
+          label={'country'}
+          error={errors?.country}
+          register={register}
+          options={{
+            required: 'please enter country',
+          }}
+          className={'input'}
+          placeholder={'Nigeria, Ghana,...'}
+        />
+      </div>
 
       <Button htmlType='submit'>create profile</Button>
     </form>

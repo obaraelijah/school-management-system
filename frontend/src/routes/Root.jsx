@@ -17,6 +17,8 @@ import SchoolDetails from '../pages/admin/components/SchoolDetails.jsx';
 import RegisterUser from '../pages/roles/RegisterUser.jsx';
 import StudentDetails from '../pages/students/components/StudentDetails.jsx';
 import Departments from '../pages/dashboard/Departments.jsx';
+import Courses from '../pages/dashboard/Courses.jsx';
+import ViewCourse from '../pages/dashboard/components/ViewCourse.jsx';
 
 const Root = (
   <Route path='/' element={<App />} errorElement={<NotFound />}>
@@ -57,6 +59,8 @@ const Root = (
           >
             <Route index element={<AdminDashBoard />} />
             <Route path='departments' element={<Departments />} />
+            <Route path='courses' element={<Courses />} />
+            <Route path='courses/:id' element={<ViewCourse />} />
           </Route>
           {/* end */}
 

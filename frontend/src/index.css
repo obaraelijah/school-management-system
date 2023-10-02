@@ -33,19 +33,23 @@ body {
   @apply border w-full py-1 rounded-lg px-3 text-black mt-2
 }
 
+.input.login {
+  @apply pl-8
+}
+
 .input:focus {
-  outline: none;
+  @apply outline-none border-btn
 }
 
 .submit {
   @apply border self-center bg-btn text-white w-2/4 rounded-xl py-2
 }
 
-.dashboard-active {
+.dactive {
   @apply bg-active
 }
 
-.dashboard-link {
+.dlink {
   @apply px-3 w-full py-2 rounded-sm flex items-center gap-2 font-bold text-[0.9rem]
 }
 
@@ -62,6 +66,18 @@ tbody tr {
   cursor: pointer;
 }
 
+a,
+.btn,
+.link {
+  @apply transform transition-all duration-75 delay-75
+}
+
+a:hover,
+.btn:hover,
+.link:hover {
+  @apply scale-[0.9] opacity-90
+}
+
 @media screen and (min-width: 765px) {
   .link {
     @apply px-12
@@ -70,6 +86,10 @@ tbody tr {
   .error {
     background-position: left, 80% 10%, 70% 90%, 30% 30%, 30% 90%;
     background-size: _, 2rem, 5rem, 10px, 3rem;
+  }
+
+  .input.login {
+    @apply pl-8
   }
 
 }

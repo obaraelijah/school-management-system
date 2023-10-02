@@ -4,13 +4,34 @@ import { Tabs, Button, Popconfirm } from 'antd';
 import { useState } from 'react';
 import { MdDelete, MdModeEdit } from 'react-icons/md';
 import UserTable from '../../components/UserTable';
+import authRequest from '../../config/requests';
+import { toast } from 'react-toastify';
 
 const AdminDashBoard = () => {
-  const { data: students } = useApiQuery(['students'], 'students/');
+  const { data: students, refetch: refetchStudents } = useApiQuery(
+    ['students'],
+    'students/'
+  );
   const { data: teachers } = useApiQuery(['teachers'], 'teachers/');
   const { data: users } = useApiQuery(['users'], 'users/');
 
   const [activeTab, setActiveTab] = useState('students');
+
+  // delete student record
+  const deleteStudent = async (id) => {
+    try {
+      const res = await authRequest.delete(`students/${id}`);
+      if (res.status === 204) {
+        toast.success('student deleted!');
+        refetchStudents();
+      } else {
+        toast.error('An error occurred while deleting student');
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error('An error occurred');
+    }
+  };
 
   // students table columns
   const studentsColumns = [
@@ -32,7 +53,7 @@ const AdminDashBoard = () => {
     {
       title: 'Action',
       dataIndex: 'actions',
-      render: () => (
+      render: (_, record) => (
         <div className='flex items-center gap-1'>
           <Popconfirm
             title='delete user'
@@ -40,6 +61,7 @@ const AdminDashBoard = () => {
             onCancel={(e) => e.stopPropagation()}
             onConfirm={(e) => {
               e.stopPropagation();
+              deleteStudent(record.student_id);
             }}
             okButtonProps={{ className: 'bg-red-700' }}
           >
@@ -47,7 +69,6 @@ const AdminDashBoard = () => {
               danger
               onClick={(e) => {
                 e.stopPropagation();
-                console.log('cl');
               }}
               className='border-none flex items-center'
             >

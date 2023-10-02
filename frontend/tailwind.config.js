@@ -44,6 +44,9 @@ export default {
       boxShadow: {
         hero: '0px 4px 100px 0px rgba(29, 28, 24, 0.25)',
       },
+      backgroundPosition: {
+        pl: '3% 50%',
+      },
     },
   },
   plugins: [],

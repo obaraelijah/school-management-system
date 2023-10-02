@@ -1,15 +1,18 @@
-import { Button, Popconfirm, Tabs } from 'antd';
-import { useSearchParams } from 'react-router-dom';
-import UserTable from '../../components/UserTable';
+import { useState } from 'react';
 import useApiQuery from '../../hooks/useApiQuery';
-import NewDepartment from './components/NewDepartment';
+import { useSearchParams } from 'react-router-dom';
 import { MdDelete, MdModeEdit } from 'react-icons/md';
+import { Button, Popconfirm, Tabs } from 'antd';
 import authRequest from '../../config/requests';
 import { toast } from 'react-toastify';
 import EditModal from '../../components/modals/EditModal';
-import { useState } from 'react';
+import UserTable from '../../components/UserTable';
+import NewCourse from './components/NewCourse';
+import { arrayToString } from '../../utils/helpers';
+import useAuthState from '../../hooks/useAuth';
 
-const Departments = () => {
+const Courses = () => {
+  const { user } = useAuthState();
   const [searchParams, setParams] = useSearchParams({
     tab: 'all',
     modal: false,
@@ -19,21 +22,40 @@ const Departments = () => {
   const activeTab = searchParams.get('tab');
   const isModalOpen = searchParams.get('modal') === 'true';
 
-  const { data: departments, refetch } = useApiQuery(
-    ['departments'],
-    'departments/'
-  );
+  const { data: courses, refetch } = useApiQuery(['courses'], 'courses/');
 
-  // handle department delete
-  const deleteDepartment = async (id) => {
+  // new course default from values
+
+  const defaultValues = {
+    course_name: '',
+    course_code: '',
+    course_description: '',
+    course_credit: '',
+    course_duration: '',
+    departments: [],
+    school_id: user?.school_id,
+  };
+
+  // edit course default form values
+  const editDefaultValues = {
+    course_name: record?.course_name,
+    course_code: record?.course_code,
+    course_description: record?.course_description,
+    course_credit: record?.course_credit,
+    course_duration: record?.course_duration,
+    departments: record?.departments,
+    school_id: user.school_id,
+  };
+
+  // handle course delete
+  const deleteCourse = async (id) => {
     try {
-      const res = await authRequest.delete(`departments/${id}/`);
-      console.log(res);
+      const res = await authRequest.delete(`courses/${id}/`);
       if (res.status === 204) {
-        toast.success('department deleted!');
+        toast.success('course deleted!');
         refetch();
       } else {
-        toast.error('An error occurred while deleting department');
+        toast.error('An error occurred while deleting course');
       }
     } catch (error) {
       console.log(error);
@@ -43,46 +65,38 @@ const Departments = () => {
 
   //handle modal close
   const closeModal = () => {
+    console.log('function');
     setParams((prev) => {
       prev.delete('modal');
       return prev;
     });
   };
 
-  const editDepartment = async () => {
-    const data = {
-      department_name: record.department_name,
-      school_id: record.school_id,
-    };
-    try {
-      const res = await authRequest.put(
-        `departments/${record.department_id}/`,
-        data
-      );
-      if (res.status === 200) {
-        toast.success(res.data?.data?.message);
-        refetch();
-        closeModal();
-      } else {
-        toast.error('An error occurred updating department');
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error('An error occurred');
-    }
-  };
-
-  // table columns for departments
+  // table columns for courses
   const columns = [
     {
       title: 'Name',
-      dataIndex: 'department_name',
-      key: 'department_name',
+      dataIndex: 'course_name',
+      key: 'course_name',
     },
     {
-      title: 'Id',
-      dataIndex: 'department_id',
-      key: 'department_id',
+      title: 'Code',
+      dataIndex: 'course_code',
+      key: 'course_code',
+    },
+    {
+      title: 'Credits',
+      dataIndex: 'course_credit',
+      key: 'course_credit',
+    },
+    {
+      title: 'departments',
+      dataIndex: 'departments_name',
+      key: 'departments_name',
+      render: (data) => {
+        const str = arrayToString(data);
+        return <span>{str}</span>;
+      },
     },
     {
       title: 'Action',
@@ -90,13 +104,12 @@ const Departments = () => {
       render: (_, record) => (
         <div className='flex items-center gap-1'>
           <Popconfirm
-            title='delete department'
-            description='Are you sure you want to delete this department? this action is irreversible'
+            title='delete course'
+            description='Are you sure you want to delete this course? this action is irreversible'
             onCancel={(e) => e.stopPropagation()}
             onConfirm={(e) => {
               e.stopPropagation();
-              deleteDepartment(record.department_id);
-              refetch();
+              deleteCourse(record.course_id);
             }}
             okButtonProps={{ className: 'bg-red-700' }}
           >
@@ -132,7 +145,7 @@ const Departments = () => {
 
   return (
     <div>
-      <h2>Departments</h2>
+      <h2>courses</h2>
       <Tabs
         activeKey={activeTab}
         onChange={(activeKey) =>
@@ -151,44 +164,32 @@ const Departments = () => {
             children: (
               <UserTable
                 columns={columns}
-                data={departments?.data}
+                data={courses?.data}
                 route={''}
-                type={'department'}
-                rowKey={'department_id'}
-                allowClick={false}
+                type={'course'}
+                rowKey={'course_id'}
+                allowClick={true}
               />
             ),
           },
           {
             label: 'New',
             key: 'new',
-            children: <NewDepartment />,
+            children: <NewCourse defaultValues={defaultValues} />,
           },
         ]}
       />
 
       <EditModal
         isModalOpen={isModalOpen}
-        handleSubmit={editDepartment}
+        handleSubmit={closeModal}
         handleClose={closeModal}
       >
-        <label htmlFor='department_name'>department name</label>
-        <input
-          type='text'
-          value={record?.department_name}
-          onChange={(e) =>
-            setRecord((prev) => ({
-              ...prev,
-              department_name: e.target.value,
-            }))
-          }
-          name='department_name'
-          id='department_name'
-          className='input'
-        />
+        <h3 className='font-semibold'>Edit course</h3>
+        <NewCourse defaultValues={editDefaultValues} id={record?.course_id} />
       </EditModal>
     </div>
   );
 };
 
-export default Departments;
+export default Courses;

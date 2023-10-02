@@ -1,5 +1,10 @@
-import { NavLink, useNavigate } from 'react-router-dom';
-import { AiOutlineHome } from 'react-icons/ai';
+import { NavLink, useNavigate, useSearchParams } from 'react-router-dom';
+import {
+  AiOutlineHome,
+  AiOutlineMenuUnfold,
+  AiOutlineMenuFold,
+  AiFillCloseCircle,
+} from 'react-icons/ai';
 import { IoSettingsOutline } from 'react-icons/io5';
 import { TbLogout2 } from 'react-icons/tb';
 import { GiArchiveRegister } from 'react-icons/gi';
@@ -7,9 +12,27 @@ import { FcDepartment } from 'react-icons/fc';
 import Logo from '../../Logo';
 import Button from '../../Button';
 import useAuthState from '../../../hooks/useAuth';
+import { PiBooks } from 'react-icons/pi';
+import { motion } from 'framer-motion';
 
 const Sidebar = () => {
   const { user, setUser } = useAuthState();
+
+  const [searchParams, setSearchParams] = useSearchParams({ menu: false });
+
+  const showMenu = searchParams.get('menu') === 'true';
+
+  const toggleMenu = () => {
+    setSearchParams((prev) => {
+      if (prev.has('menu')) {
+        prev.delete('menu');
+      } else {
+        prev.set('menu', true);
+      }
+      return prev;
+    });
+  };
+
   const role = user?.role.toLowerCase();
   const superAdmin = role === 'superuser';
   const admin = role === 'schooladmin';
@@ -28,12 +51,13 @@ const Sidebar = () => {
       <div className='hidden  w-full py-8 h-full md:flex flex-col'>
         <Logo />
         <nav className='md:py-10'>
-          <ul className='flex gap-7 flex-col justify-center'>
+          <ul className='flex gap-7 flex-col justify-center capitalize'>
             <li>
               <NavLink
                 to={`/dashboard/${role}`}
-                className={`${({ isActive }) =>
-                  isActive ? 'dashboard-active' : ''} dashboard-link`}
+                className={({ isActive }) =>
+                  isActive ? 'dactive dlink' : 'dlink'
+                }
               >
                 <AiOutlineHome className='icon' />
                 dashboard
@@ -45,8 +69,9 @@ const Sidebar = () => {
                 <li>
                   <NavLink
                     to={`/dashboard/register?tab=user`}
-                    className={`${({ isActive }) =>
-                      isActive ? 'bg-active' : ''}  dashboard-link`}
+                    className={({ isActive }) =>
+                      isActive ? 'dactive dlink' : 'dlink'
+                    }
                   >
                     <GiArchiveRegister className='icon' />
                     register user
@@ -60,11 +85,23 @@ const Sidebar = () => {
                 <li>
                   <NavLink
                     to={`/dashboard/schooladmin/departments?tab=all`}
-                    className={`${({ isActive }) =>
-                      isActive ? 'bg-active' : ''}  dashboard-link`}
+                    className={({ isActive }) =>
+                      isActive ? 'dactive dlink' : 'dlink'
+                    }
                   >
                     <FcDepartment className='icon' />
                     departments
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to={`/dashboard/schooladmin/courses?tab=all`}
+                    className={({ isActive }) =>
+                      isActive ? 'dactive dlink' : 'dlink'
+                    }
+                  >
+                    <PiBooks className='icon' />
+                    courses
                   </NavLink>
                 </li>
               </>
@@ -75,8 +112,9 @@ const Sidebar = () => {
                 <li>
                   <NavLink
                     to={'/dashboard/superuser/new_school/'}
-                    className={`${({ isActive }) =>
-                      isActive ? 'dashboard-active' : ''} dashboard-link`}
+                    className={({ isActive }) =>
+                      isActive ? 'dactive dlink' : 'dlink'
+                    }
                   >
                     register school
                   </NavLink>
@@ -86,8 +124,9 @@ const Sidebar = () => {
             <li>
               <NavLink
                 to={'/dashboard/settings'}
-                className={`${({ isActive }) =>
-                  isActive ? 'dashboard-active' : ''} dashboard-link`}
+                className={({ isActive }) =>
+                  isActive ? 'dactive dlink' : 'dlink'
+                }
               >
                 <IoSettingsOutline />
                 settings
@@ -98,7 +137,7 @@ const Sidebar = () => {
 
         <Button
           className={
-            'mt-auto px-12 w-full py-2 rounded-sm flex items-center gap-2 font-bold text-base capitalize text-cm-orange-100'
+            'mt-auto px-12 w-full py-2 rounded-sm flex items-center gap-2 font-bold text-base capitalize  text-cm-orange-100'
           }
           onClick={handleSignOut}
         >
@@ -107,81 +146,126 @@ const Sidebar = () => {
       </div>
 
       {/* mobile nav */}
-      <div className='py-3 md:hidden'>
-        <Logo />
-      </div>
 
-      <div className='fixed z-50 bottom-0 flex md:hidden bg-header w-full py-3 px-4 overflow-x-scroll text-white'>
-        <nav>
-          <ul className='flex  justify-center items-center capitalize'>
-            <li>
-              <NavLink
-                to={'/dashboard/admin'}
-                className={`${({ isActive }) =>
-                  isActive ? 'dashboard-active' : ''} dashboard-link`}
-              >
-                <AiOutlineHome className='icon' />
-                dashboard
-              </NavLink>
-            </li>
-            {admin && (
-              <>
-                <li>
-                  <NavLink
-                    to={'/dashboard/new-teacher'}
-                    className={`${({ isActive }) =>
-                      isActive ? 'dashboard-active' : ''} dashboard-link`}
-                  >
-                    register teacher
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to={'/dashboard/new-student'}
-                    className={`${({ isActive }) =>
-                      isActive ? 'dashboard-active' : ''} dashboard-link`}
-                  >
-                    register student
-                  </NavLink>
-                </li>
-              </>
-            )}
+      <Button
+        className='fixed right-4 z-50 bottom-4 flex md:hidden bg-blue-800 rounded-full p-2'
+        onClick={toggleMenu}
+      >
+        {showMenu ? (
+          <AiOutlineMenuUnfold className='text-3xl' />
+        ) : (
+          <AiOutlineMenuFold className='text-3xl' />
+        )}
+      </Button>
+      {showMenu && (
+        <motion.div
+          initial={{ width: 0, opacity: 0 }}
+          animate={{ width: '60%', opacity: 1 }}
+          exit={{ width: 0, opacity: 0 }}
+          transition={{ duration: 1.5 }}
+          className='fixed top-0 left-0 z-30 bg-header flex flex-col h-screen overflow-y-scroll py-5 md:hidden items-start'
+        >
+          <Button
+            className={'absolute right-2 top-3 text-3xl'}
+            onClick={toggleMenu}
+          >
+            <AiFillCloseCircle />
+          </Button>
+          <Logo />
+          <nav className='px-3 py-5'>
+            <ul className='flex  justify-center flex-col capitalize'>
+              <li>
+                <NavLink
+                  to={`/dashboard/${role}`}
+                  className={({ isActive }) =>
+                    isActive ? 'dactive dlink' : 'dlink'
+                  }
+                >
+                  <AiOutlineHome className='icon' />
+                  dashboard
+                </NavLink>
+              </li>
+              {/* superuser and school admins have access */}
+              {admins && (
+                <>
+                  <li>
+                    <NavLink
+                      to={`/dashboard/register?tab=user`}
+                      className={({ isActive }) =>
+                        isActive ? 'dactive dlink' : 'dlink'
+                      }
+                    >
+                      <GiArchiveRegister className='icon' />
+                      register user
+                    </NavLink>
+                  </li>
+                </>
+              )}
 
-            {superAdmin && (
-              <>
-                <li>
-                  <NavLink
-                    to={'/dashboard/superuser/new_school'}
-                    className={`${({ isActive }) =>
-                      isActive ? 'dashboard-active' : ''} dashboard-link`}
-                  >
-                    register school
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to={'/dashboard/superuser/new_admin'}
-                    className={`${({ isActive }) =>
-                      isActive ? 'dashboard-active' : ''} dashboard-link`}
-                  >
-                    school admin
-                  </NavLink>
-                </li>
-              </>
-            )}
-            <li>
-              <NavLink
-                to={'/dashboard/settings'}
-                className={`${({ isActive }) =>
-                  isActive ? 'dashboard-active' : ''} dashboard-link`}
-              >
-                <IoSettingsOutline />
-                settings
-              </NavLink>
-            </li>
-          </ul>
-        </nav>
-      </div>
+              {admin && (
+                <>
+                  <li>
+                    <NavLink
+                      to={`/dashboard/schooladmin/departments?tab=all`}
+                      className={({ isActive }) =>
+                        isActive ? 'dactive dlink' : 'dlink'
+                      }
+                    >
+                      <FcDepartment className='icon' />
+                      departments
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to={`/dashboard/schooladmin/courses?tab=all`}
+                      className={({ isActive }) =>
+                        isActive ? 'dactive dlink' : 'dlink'
+                      }
+                    >
+                      <PiBooks className='icon' />
+                      courses
+                    </NavLink>
+                  </li>
+                </>
+              )}
+
+              {superAdmin && (
+                <>
+                  <li>
+                    <NavLink
+                      to={'/dashboard/superuser/new_school/'}
+                      className={({ isActive }) =>
+                        isActive ? 'dactive dlink' : 'dlink'
+                      }
+                    >
+                      register school
+                    </NavLink>
+                  </li>
+                </>
+              )}
+              <li>
+                <NavLink
+                  to={'/dashboard/settings'}
+                  className={({ isActive }) =>
+                    isActive ? 'dactive dlink' : 'dlink'
+                  }
+                >
+                  <IoSettingsOutline />
+                  settings
+                </NavLink>
+              </li>
+            </ul>
+          </nav>
+          <Button
+            className={
+              'mt-auto px-12 w-full py-2 rounded-sm flex items-center gap-2 font-bold text-base capitalize  text-cm-orange-100'
+            }
+            onClick={handleSignOut}
+          >
+            <TbLogout2 /> sign out
+          </Button>
+        </motion.div>
+      )}
     </aside>
   );
 };

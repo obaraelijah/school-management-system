@@ -13,6 +13,7 @@ import Logo from '../../Logo';
 import Button from '../../Button';
 import useAuthState from '../../../hooks/useAuth';
 import { PiBooks } from 'react-icons/pi';
+import { RiSchoolLine } from 'react-icons/ri';
 import { motion } from 'framer-motion';
 
 const Sidebar = () => {
@@ -64,7 +65,7 @@ const Sidebar = () => {
               </NavLink>
             </li>
             {/* superuser and school admins have access */}
-            {admins && (
+            {/* {admins && (
               <>
                 <li>
                   <NavLink
@@ -78,10 +79,21 @@ const Sidebar = () => {
                   </NavLink>
                 </li>
               </>
-            )}
+            )} */}
 
             {admin && (
               <>
+                <li>
+                  <NavLink
+                    to={`/dashboard/register?tab=user`}
+                    className={({ isActive }) =>
+                      isActive ? 'dactive dlink' : 'dlink'
+                    }
+                  >
+                    <GiArchiveRegister className='icon' />
+                    register user
+                  </NavLink>
+                </li>
                 <li>
                   <NavLink
                     to={`/dashboard/schooladmin/departments?tab=all`}
@@ -116,6 +128,7 @@ const Sidebar = () => {
                       isActive ? 'dactive dlink' : 'dlink'
                     }
                   >
+                    <RiSchoolLine />
                     register school
                   </NavLink>
                 </li>
@@ -159,11 +172,11 @@ const Sidebar = () => {
       </Button>
       {showMenu && (
         <motion.div
-          initial={{ width: 0, opacity: 0 }}
-          animate={{ width: '60%', opacity: 1 }}
-          exit={{ width: 0, opacity: 0 }}
-          transition={{ duration: 1.5 }}
-          className='fixed top-0 left-0 z-30 bg-header flex flex-col h-screen overflow-y-scroll py-5 md:hidden items-start'
+          initial={{ x: '-100vw', opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          exit={{ x: '-100vw', opacity: 0 }}
+          transition={{ duration: 1 }}
+          className='fixed top-0 left-0 z-30 bg-header flex flex-col h-screen overflow-y-scroll py-5 md:hidden items-start px-5'
         >
           <Button
             className={'absolute right-2 top-3 text-3xl'}

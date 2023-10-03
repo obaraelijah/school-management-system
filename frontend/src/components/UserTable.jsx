@@ -20,6 +20,7 @@ const UserTable = (props) => {
           },
         };
       }}
+      scroll={{ x: 'max-content' }}
     />
   );
 };

@@ -1,71 +1,63 @@
 import { useState } from 'react';
 import Header from '../../components/headers/dashboard/Header';
 import useApiQuery from '../../hooks/useApiQuery';
-import { List, Tabs } from 'antd';
+import { Tabs } from 'antd';
+import UserTable from '../../components/UserTable';
 
 const SuperAdmin = () => {
   // tabs state
   const [activeKey, setActiveKey] = useState('schools');
   const { data: schools } = useApiQuery(['schools'], 'schools/');
-  const { data: users } = useApiQuery(['users'], 'users/');
-  console.log(users);
+
+  const schoolColumns = [
+    {
+      title: 'School logo',
+      dataIndex: 'school_logo',
+      key: 'school_logo',
+      render: (img) => {
+        return (
+          <img
+            src={img}
+            width={50}
+            className='rounded-full'
+            alt="school's logo"
+          />
+        );
+      },
+    },
+    {
+      title: 'Name',
+      dataIndex: 'school_name',
+      key: 'school_name',
+    },
+    {
+      title: 'email',
+      dataIndex: 'school_email',
+      key: 'school_email',
+    },
+  ];
+
   return (
     <div>
       <Header />
       <Tabs
         activeKey={activeKey}
         onChange={(activeKey) => setActiveKey(activeKey)}
-      >
-        <Tabs.TabPane key={'schools'} tab='Schools' />
-        <Tabs.TabPane key={'users'} tab='Users' />
-      </Tabs>
-      {activeKey === 'schools' ? (
-        <List
-          itemLayout='vertical'
-          size='large'
-          pagination={{
-            onChange: (page) => page,
-            pageSize: 15,
-            align: 'center',
-          }}
-          dataSource={schools?.data}
-          renderItem={(item) => (
-            <List.Item key={item?.school_id}>
-              <div className='grid grid-cols-7 items-center'>
-                <img
-                  src={item.school_logo}
-                  alt='school logo'
-                  className='rounded-full w-1/3 col-span-1'
-                />
-                <h2 className='col-span-2'>{item.school_name}</h2>
-                <p className='col-span-3'>{item.school_id}</p>
-              </div>
-            </List.Item>
-          )}
-        />
-      ) : (
-        <List
-          itemLayout='vertical'
-          size='large'
-          pagination={{
-            onChange: (page) => page,
-            pageSize: 15,
-            align: 'center',
-          }}
-          dataSource={users?.data}
-          renderItem={(item) => (
-            <List.Item key={item?.id}>
-              <div className='grid grid-cols-7 items-center'>
-                <h2 className='col-span-2'>
-                  {item.first_name} {item.last_name}
-                </h2>
-                <p className='col-span-3'>{item.role_name}</p>
-                <p>{item.school_name}</p>
-              </div>
-            </List.Item>
-          )}
-        />
-      )}
+        items={[
+          {
+            label: 'schools',
+            key: 'schools',
+            children: (
+              <UserTable
+                columns={schoolColumns}
+                data={schools?.data}
+                route={'/dashboard/school/'}
+                rowKey={'school_id'}
+              />
+            ),
+          },
+        ]}
+      />
     </div>
   );
 };

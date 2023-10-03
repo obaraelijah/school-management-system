@@ -12,6 +12,7 @@ const AdminDashBoard = () => {
     ['students'],
     'students/'
   );
+
   const { data: teachers } = useApiQuery(['teachers'], 'teachers/');
   const { data: users } = useApiQuery(['users'], 'users/');
 

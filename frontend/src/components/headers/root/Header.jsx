@@ -23,7 +23,7 @@ const Header = () => {
   };
 
   return (
-    <header className='flex justify-between w-full py-7 px-5 bg-header text-white sticky top-0 items-center z-50'>
+    <header className='flex justify-between w-full py-7 px-5 bg-header text-white sticky top-0 items-center z-50 opacity-95 md:px-20'>
       <Button
         className='text-3xl md:hidden border-none text-white'
         onClick={toggleMenu}

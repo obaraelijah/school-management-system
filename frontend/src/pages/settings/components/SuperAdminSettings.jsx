@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Tabs } from 'antd';
 import UserProfile from './UserProfile';
 
-const StudentSettings = () => {
+const SuperAdminSettings = () => {
   const [activeKey, setActiveKey] = useState('profile');
 
   return (
@@ -17,15 +17,10 @@ const StudentSettings = () => {
             key: 'profile',
             children: <UserProfile />,
           },
-
-          {
-            label: 'edit student profile',
-            key: 'student',
-          },
         ]}
       />
     </div>
   );
 };
 
-export default StudentSettings;
+export default SuperAdminSettings;

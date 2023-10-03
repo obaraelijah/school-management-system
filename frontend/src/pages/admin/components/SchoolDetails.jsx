@@ -3,13 +3,22 @@ import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import authRequest from '../../../config/requests';
 import { toast } from 'react-toastify';
-import Button from '../../../components/Button';
+import { Button, Spin } from 'antd';
+import { FaWindowClose } from 'react-icons/fa';
+import { useSearchParams } from 'react-router-dom';
 
 const SchoolDetails = () => {
+  const [searchParams, setSearchParams] = useSearchParams({ loading: false });
+
+  const isLoading = searchParams.get('loading') === 'true';
+
   const [image, setImage] = useState('');
   const {
     register,
     handleSubmit,
+    getValues,
+    setValue,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -26,19 +35,15 @@ const SchoolDetails = () => {
     },
   });
 
-  const schools = async () => {
-    try {
-      // const res = await authRequest.get('schools/');
-      // const roles = await authRequest.get('roles/');
-      const users = await authRequest.get('users/');
-      // console.log(res);
-      // console.log(roles);
-      console.log(users);
-    } catch (error) {
-      console.log(error);
-    }
+  const uploadImage = () => {
+    const data = getValues();
+    convertFile(data.school_logo[0]);
   };
-  schools();
+
+  const removeImage = () => {
+    setImage('');
+    setValue('school_logo', []);
+  };
 
   const convertFile = (file) => {
     const reader = new FileReader();
@@ -50,7 +55,10 @@ const SchoolDetails = () => {
   };
 
   const onSubmit = async (data) => {
-    convertFile(data.school_logo[0]);
+    setSearchParams((prev) => {
+      prev.set('loading', true);
+      return prev;
+    });
     const logo = data.school_logo[0];
 
     const formData = new FormData();
@@ -67,16 +75,20 @@ const SchoolDetails = () => {
 
     try {
       const res = await authRequest.post('schools/', formData);
-      console.log(res);
-      if (res.status === 201) {
-        const data = res.data;
-        console.log(data);
+      if (res.status === 'success') {
+        toast.success(res.message);
+        reset();
       } else {
         toast.error('error creating school');
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.detail);
+      toast.error('An error occurred');
+    } finally {
+      setSearchParams((prev) => {
+        prev.delete('loading');
+        return prev;
+      });
     }
   };
 
@@ -115,19 +127,45 @@ const SchoolDetails = () => {
               placeholder={'enter school email'}
             />
           </div>
-          {image && <img src={image} />}
-          <Input
-            name='school_logo'
-            register={register}
-            className={'border ml-3 invalid:border-red-500 focus:outline-none'}
-            error={errors.school_logo}
-            label={'school logo'}
-            options={{
-              required: true,
-            }}
-            type={'file'}
-          />
+          <div className=''>
+            {image && (
+              <div className='relative w-fit'>
+                <img src={image} alt='school logo' width={200} />
+                <FaWindowClose
+                  className='text-red-500 absolute text-xl right-1 top-1'
+                  onClick={removeImage}
+                />
+              </div>
+            )}
+            <div className='flex justify-start items-center gap-3 w-full py-3'>
+              <label
+                htmlFor='school_logo'
+                className='capitalize text-lg text-word'
+              >
+                school logo
+              </label>
+              <input
+                id='school_logo'
+                {...register('school_logo', {
+                  required: true,
+                })}
+                className={'border w-1/3'}
+                type={'file'}
+              />
+              <Button onClick={uploadImage} className='text-lg capitalize'>
+                upload
+              </Button>
+            </div>
 
+            {errors?.school_logo && (
+              <p
+                className='text-red-500 text-xs pt-1 normal-case italic'
+                role='alert'
+              >
+                {errors?.school_logo?.message}
+              </p>
+            )}
+          </div>
           <Input
             name='school_address'
             register={register}
@@ -214,9 +252,12 @@ const SchoolDetails = () => {
               placeholder={'postal code'}
             />
           </div>
+          {isLoading && <Spin size='large' />}
+
           <Button
-            type='submit'
-            className='px-5 bg-cm-orange-100 text-white py-2 rounded-lg text-xl'
+            htmlType='submit'
+            className='px-5 bg-cm-orange-100 text-white rounded-lg text-xl capitalize'
+            size='large'
           >
             register school
           </Button>

@@ -10,7 +10,7 @@ export default {
         'cm-orange': {
           100: '#F48C06',
         },
-        header: '#001C27',
+        header: '#0052B4',
         btn: '#49BBBD',
         'light-btn': 'rgba(73, 187, 189, 0.60)',
         foreground: '#273240',

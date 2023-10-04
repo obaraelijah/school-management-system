@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from .models import CustomUser, Role
-from .serializers import CustomUserSerializer, RoleSerializer
+from .serializers import CustomUserSerializer, RoleSerializer, UserResetPasswordSerailizer
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from django.core.mail import send_mail
 from django.core.exceptions import ObjectDoesNotExist
@@ -615,7 +615,7 @@ class UserResetPassword(APIView):
 
     @swagger_auto_schema(
         operation_summary="Existing user reset their old password to new one",
-        request_body=CustomUserSerializer,
+        request_body=UserResetPasswordSerailizer,
         responses={
             200: "password reset successfully",
             400: 'Bad Request'},

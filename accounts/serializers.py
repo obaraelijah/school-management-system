@@ -59,3 +59,7 @@ class RoleSerializer(serializers.ModelSerializer):
         fields = ["role_id", "role_name"]
 
 
+class UserResetPasswordSerailizer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ["password"]

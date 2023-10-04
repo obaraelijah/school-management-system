@@ -9,6 +9,7 @@ import { MdDelete, MdModeEdit } from 'react-icons/md';
 import UserTable from '../../components/UserTable';
 import EditModal from '../../components/modals/EditModal';
 import { BiSolidDownload } from 'react-icons/bi';
+import NewMaterial from './components/NewMaterial';
 
 const CourseMaterials = () => {
   const { user } = useAuthState();
@@ -31,35 +32,29 @@ const CourseMaterials = () => {
   // new course default from values
 
   const defaultValues = {
-    course_name: '',
-    course_code: '',
-    course_description: '',
-    course_credit: '',
-    course_duration: '',
-    departments: [],
+    course_material_name: '',
+    course_id: '',
+    course_material_file: [],
     school_id: user?.school_id,
   };
 
   // edit course default form values
   const editDefaultValues = {
-    course_name: record?.course_name,
-    course_code: record?.course_code,
-    course_description: record?.course_description,
-    course_credit: record?.course_credit,
-    course_duration: record?.course_duration,
-    departments: record?.departments,
+    course_material_name: record?.course_material_name,
+    course_id: record?.course_id,
     school_id: user.school_id,
+    course_material_file: record?.course_material_file,
   };
 
-  // handle course delete
-  const deleteCourse = async (id) => {
+  // handle course material delete
+  const deleteCourseMaterial = async (id) => {
     try {
-      const res = await authRequest.delete(`courses/${id}/`);
+      const res = await authRequest.delete(`course-materials/${id}/`);
       if (res.status === 204) {
-        toast.success('course deleted!');
+        toast.success('course material deleted!');
         refetch();
       } else {
-        toast.error('An error occurred while deleting course');
+        toast.error('An error occurred while deleting course material');
       }
     } catch (error) {
       console.log(error);
@@ -106,12 +101,12 @@ const CourseMaterials = () => {
       render: (_, record) => (
         <div className='flex items-center gap-1'>
           <Popconfirm
-            title='delete course'
-            description='Are you sure you want to delete this course? this action is irreversible'
+            title='Delete Course Material'
+            description='Are you sure you want to delete this course material? this action is irreversible'
             onCancel={(e) => e.stopPropagation()}
             onConfirm={(e) => {
               e.stopPropagation();
-              deleteCourse(record.course_id);
+              deleteCourseMaterial(record.course_material_id);
             }}
             okButtonProps={{ className: 'bg-red-700' }}
           >
@@ -126,7 +121,7 @@ const CourseMaterials = () => {
               <MdDelete className='text-xl' />
             </Button>
           </Popconfirm>
-          <Button
+          {/* <Button
             onClick={(e) => {
               e.stopPropagation();
               setParams((prev) => {
@@ -139,7 +134,7 @@ const CourseMaterials = () => {
           >
             {' '}
             <MdModeEdit className='text-xl' />
-          </Button>
+          </Button> */}
         </div>
       ),
     },
@@ -172,13 +167,14 @@ const CourseMaterials = () => {
                 route={''}
                 type={'materials'}
                 rowKey={'course_material_id'}
-                allowClick={true}
+                allowClick={false}
               />
             ),
           },
           {
             label: 'New',
             key: 'new',
+            children: <NewMaterial defaultValues={defaultValues} />,
           },
         ]}
       />

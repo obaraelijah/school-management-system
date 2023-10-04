@@ -586,7 +586,7 @@ class UserForgetPassword(APIView):
 
         # Generate a forget password URL
             
-        forget_password_url = f"https://smartedconnect.netlify.app/api/v1/?user_id={user.id}&token={user.reset_password_token}"
+        forget_password_url = f"https://smartedconnect.netlify.app/api/v1/reset_password/?user_id={user.id}&token={user.reset_password_token}"
 
         message += f'\n\n{forget_password_url}'
 

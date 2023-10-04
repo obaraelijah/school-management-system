@@ -1,11 +1,11 @@
 import Header from '../../components/headers/dashboard/Header';
 import useApiQuery from '../../hooks/useApiQuery';
 import { Tabs, Button, Popconfirm } from 'antd';
-import { useState } from 'react';
-import { MdDelete, MdModeEdit } from 'react-icons/md';
+import { MdDelete } from 'react-icons/md';
 import UserTable from '../../components/UserTable';
 import authRequest from '../../config/requests';
 import { toast } from 'react-toastify';
+import { useSearchParams } from 'react-router-dom';
 
 const AdminDashBoard = () => {
   const { data: students, refetch: refetchStudents } = useApiQuery(
@@ -13,10 +13,15 @@ const AdminDashBoard = () => {
     'students/'
   );
 
-  const { data: teachers } = useApiQuery(['teachers'], 'teachers/');
+  const { data: teachers, refetch: refetchTeachers } = useApiQuery(
+    ['teachers'],
+    'teachers/'
+  );
   const { data: users } = useApiQuery(['users'], 'users/');
 
-  const [activeTab, setActiveTab] = useState('students');
+  const [searchParams, setSearchParams] = useSearchParams({ tab: 'students' });
+
+  const activeTab = searchParams.get('tab');
 
   // delete student record
   const deleteStudent = async (id) => {
@@ -33,6 +38,24 @@ const AdminDashBoard = () => {
       toast.error('An error occurred');
     }
   };
+
+  // delete teacher record
+  const deleteTeacher = async (id) => {
+    try {
+      const res = await authRequest.delete(`teachers/${id}`);
+      if (res.status === 204) {
+        toast.success('teacher deleted!');
+        refetchTeachers();
+      } else {
+        toast.error('An error occurred while deleting teacher');
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error('An error occurred');
+    }
+  };
+
+  // delete teacher record
 
   // students table columns
   const studentsColumns = [
@@ -57,8 +80,8 @@ const AdminDashBoard = () => {
       render: (_, record) => (
         <div className='flex items-center gap-1'>
           <Popconfirm
-            title='delete user'
-            description='Are you sure you want to delete this user? this action is irreversible'
+            title='Delete Student'
+            description='Are you sure you want to delete this student? this action is irreversible'
             onCancel={(e) => e.stopPropagation()}
             onConfirm={(e) => {
               e.stopPropagation();
@@ -77,7 +100,7 @@ const AdminDashBoard = () => {
               <MdDelete className='text-xl' />
             </Button>
           </Popconfirm>
-          <Button
+          {/* <Button
             onClick={(e) => {
               e.stopPropagation();
               console.log('cl');
@@ -86,7 +109,7 @@ const AdminDashBoard = () => {
           >
             {' '}
             <MdModeEdit className='text-xl' />
-          </Button>
+          </Button> */}
         </div>
       ),
     },
@@ -105,14 +128,63 @@ const AdminDashBoard = () => {
       key: 'user_last_name',
     },
     {
-      title: 'Departments',
-      dataIndex: 'department',
-      key: 'department',
-      render: (_, { department }) => {
-        {
-          department?.map((dep) => <span key={dep}>{dep}</span>);
-        }
-      },
+      title: 'Gender',
+      dataIndex: 'gender',
+      key: 'gender',
+    },
+    {
+      title: 'Country',
+      dataIndex: 'country',
+      key: 'country',
+    },
+    // {
+    //   title: 'Departments',
+    //   dataIndex: 'department',
+    //   key: 'department',
+    //   render: (_, { department }) => {
+    //     {
+    //       department?.map((dep) => <span key={dep}>{dep}</span>);
+    //     }
+    //   },
+    // },
+    {
+      title: 'Action',
+      dataIndex: 'actions',
+      render: (_, record) => (
+        <div className='flex items-center gap-1'>
+          <Popconfirm
+            title='delete teacher'
+            description='Are you sure you want to delete this teacher? this action is irreversible'
+            onCancel={(e) => e.stopPropagation()}
+            onConfirm={(e) => {
+              e.stopPropagation();
+              deleteTeacher(record.student_id);
+            }}
+            okButtonProps={{ className: 'bg-red-700' }}
+          >
+            <Button
+              danger
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+              className='border-none flex items-center'
+            >
+              {' '}
+              <MdDelete className='text-xl' />
+            </Button>
+          </Popconfirm>
+          {/* <Button
+            onClick={(e) => {
+              e.stopPropagation();
+              console.log('cl');
+            }}
+            className='border-none flex items-center'
+          >
+            {' '}
+            <MdModeEdit className='text-xl' />
+          </Button> */}
+        </div>
+      ),
     },
   ];
   // users table columns
@@ -137,6 +209,35 @@ const AdminDashBoard = () => {
       dataIndex: 'role_name',
       key: 'role_name',
     },
+    // {
+    //   title: 'Action',
+    //   dataIndex: 'actions',
+    //   render: (_, record) => (
+    //     <div className='flex items-center gap-1'>
+    //       <Popconfirm
+    //         title='Delete User'
+    //         description='Are you sure you want to delete this user? this action is irreversible'
+    //         onCancel={(e) => e.stopPropagation()}
+    //         onConfirm={(e) => {
+    //           e.stopPropagation();
+    //           deleteUser(record.student_id);
+    //         }}
+    //         okButtonProps={{ className: 'bg-red-700' }}
+    //       >
+    //         <Button
+    //           danger
+    //           onClick={(e) => {
+    //             e.stopPropagation();
+    //           }}
+    //           className='border-none flex items-center'
+    //         >
+    //           {' '}
+    //           <MdDelete className='text-xl' />
+    //         </Button>
+    //       </Popconfirm>
+    //     </div>
+    //   ),
+    // },
   ];
 
   return (
@@ -144,7 +245,12 @@ const AdminDashBoard = () => {
       <Header />
       <Tabs
         activeKey={activeTab}
-        onChange={(activeKey) => setActiveTab(activeKey)}
+        onChange={(activeKey) =>
+          setSearchParams((prev) => {
+            prev.set('tab', activeKey);
+            return prev;
+          })
+        }
         items={[
           {
             label: 'students',
@@ -165,8 +271,8 @@ const AdminDashBoard = () => {
               <UserTable
                 columns={teacherColumns}
                 data={teachers?.data}
-                rowKey={'user_id'}
-                route={''}
+                rowKey={'teacher_id'}
+                route={'/dashboard/teacher/'}
               />
             ),
           },
@@ -179,6 +285,7 @@ const AdminDashBoard = () => {
                 data={users?.data}
                 route={''}
                 rowKey={'id'}
+                allowClick={false}
               />
             ),
           },

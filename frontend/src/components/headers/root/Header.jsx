@@ -1,4 +1,4 @@
-import { NavLink, useSearchParams } from 'react-router-dom';
+import { Link, NavLink, useSearchParams } from 'react-router-dom';
 import { RiMenu2Line } from 'react-icons/ri';
 import Logo from '../../Logo';
 import NavBar from '../../nav/NavBar';
@@ -13,7 +13,7 @@ const Header = () => {
 
   const toggleMenu = () => {
     setSearchParams((prev) => {
-      if (prev.has('menu')) {
+      if (prev.get('menu')) {
         prev.delete('menu');
       } else {
         prev.set('menu', true);
@@ -28,7 +28,13 @@ const Header = () => {
         className='text-3xl md:hidden border-none text-white'
         onClick={toggleMenu}
       >
-        {showMenu ? <AiFillCloseCircle className='' /> : <RiMenu2Line />}
+        {showMenu ? (
+          <AiFillCloseCircle className='' />
+        ) : (
+          <Link to={'?menu=true'}>
+            <RiMenu2Line />
+          </Link>
+        )}
       </Button>
       <Logo />
       <div className='hidden md:inline-block'>

@@ -59,6 +59,7 @@ const Sidebar = () => {
                 className={({ isActive }) =>
                   isActive ? 'dactive dlink' : 'dlink'
                 }
+                end
               >
                 <AiOutlineHome className='icon' />
                 dashboard
@@ -116,6 +117,17 @@ const Sidebar = () => {
                     courses
                   </NavLink>
                 </li>
+                <li>
+                  <NavLink
+                    to={`/dashboard/schooladmin/materials?tab=all`}
+                    className={({ isActive }) =>
+                      isActive ? 'dactive dlink' : 'dlink'
+                    }
+                  >
+                    <PiBooks className='icon' />
+                    materials
+                  </NavLink>
+                </li>
               </>
             )}
 
@@ -150,7 +162,7 @@ const Sidebar = () => {
 
         <Button
           className={
-            'mt-auto px-12 w-full py-2 rounded-sm flex items-center gap-2 font-bold text-base capitalize  text-cm-orange-100'
+            'mt-auto px-12 w-fit py-2 rounded-sm flex items-center text-left outline-none gap-2 font-bold justify-start text-base capitalize  text-cm-orange-100'
           }
           onClick={handleSignOut}
         >
@@ -161,7 +173,7 @@ const Sidebar = () => {
       {/* mobile nav */}
 
       <Button
-        className='fixed right-4 z-50 bottom-4 flex md:hidden bg-blue-800 rounded-full p-2'
+        className='fixed right-4 z-50 bottom-12 flex md:hidden bg-blue-800 rounded-full p-2'
         onClick={toggleMenu}
       >
         {showMenu ? (
@@ -176,7 +188,7 @@ const Sidebar = () => {
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: '-100vw', opacity: 0 }}
           transition={{ duration: 1 }}
-          className='fixed top-0 left-0 z-30 bg-header flex flex-col h-screen overflow-y-scroll py-5 md:hidden items-start px-5'
+          className='fixed top-0 left-0 z-30 bg-header flex flex-col h-screen overflow-y-scroll py-5 md:hidden items-start pr-5 justify-start'
         >
           <Button
             className={'absolute right-2 top-3 text-3xl'}
@@ -186,13 +198,14 @@ const Sidebar = () => {
           </Button>
           <Logo />
           <nav className='px-3 py-5'>
-            <ul className='flex  justify-center flex-col capitalize'>
+            <ul className='flex flex-col capitalize'>
               <li>
                 <NavLink
                   to={`/dashboard/${role}`}
                   className={({ isActive }) =>
                     isActive ? 'dactive dlink' : 'dlink'
                   }
+                  end
                 >
                   <AiOutlineHome className='icon' />
                   dashboard
@@ -239,6 +252,17 @@ const Sidebar = () => {
                       courses
                     </NavLink>
                   </li>
+                  <li>
+                    <NavLink
+                      to={`/dashboard/schooladmin/materials?tab=all`}
+                      className={({ isActive }) =>
+                        isActive ? 'dactive dlink' : 'dlink'
+                      }
+                    >
+                      <PiBooks className='icon' />
+                      materials
+                    </NavLink>
+                  </li>
                 </>
               )}
 
@@ -271,7 +295,7 @@ const Sidebar = () => {
           </nav>
           <Button
             className={
-              'mt-auto px-12 w-full py-2 rounded-sm flex items-center gap-2 font-bold text-base capitalize  text-cm-orange-100'
+              ' px-12 w-full py-2 rounded-sm flex items-center gap-2 font-bold text-base capitalize  text-cm-orange-100 text-left'
             }
             onClick={handleSignOut}
           >

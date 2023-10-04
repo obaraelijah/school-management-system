@@ -44,13 +44,10 @@ const NewUser = () => {
 
   const { user } = useAuthState();
   const isSchoolAdmin = user.role.toLowerCase() === 'schooladmin';
-  const isSuperUser = user.role.toLowerCase() === 'superuser';
 
   const filteredRoles = roles?.filter((role) => {
     if (isSchoolAdmin) {
-      return !['schooladmin', 'superuser'].includes(
-        role.role_name.toLowerCase()
-      );
+      return !['superuser'].includes(role.role_name.toLowerCase());
     }
     return role;
   });
@@ -207,41 +204,38 @@ const NewUser = () => {
         )}
       </div>
 
-      {isSuperUser && (
-        <div
-          className={`flex flex-col justify-center px-5 md:px-10 py-4 rounded-md my-5 ${
-            isNewRole && 'border'
+      <div
+        className={`flex flex-col justify-center px-5 md:px-10 py-4 rounded-md my-5 ${
+          isNewRole && 'border'
+        }`}
+      >
+        <AntButton
+          className={`self-end transition transform ease-in-out duration-75 ${
+            isNewRole && 'text-red-500 border-red-500'
           }`}
+          onClick={toggleButton}
         >
-          <AntButton
-            className={`self-end transition transform ease-in-out duration-75 ${
-              isNewRole && 'text-red-500 border-red-500'
-            }`}
-            onClick={toggleButton}
-          >
-            {isNewRole ? 'close' : 'create role name'}
-          </AntButton>
+          {isNewRole ? 'close' : 'create role name'}
+        </AntButton>
 
-          {isNewRole && (
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <Input
-                name='role_name'
-                register={register}
-                error={errors.role_name}
-                options={{
-                  required: 'please provide a role name',
-                }}
-                placeholder={
-                  isSchoolAdmin ? 'student or teacher' : 'schooladmin'
-                }
-                className={'input'}
-                label={'role name:'}
-              />
-              <AntButton htmlType='submit'>submit</AntButton>
-            </form>
-          )}
-        </div>
-      )}
+        {isNewRole && (
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Input
+              name='role_name'
+              register={register}
+              error={errors.role_name}
+              options={{
+                required: 'please provide a role name',
+              }}
+              placeholder={isSchoolAdmin ? 'student or teacher' : 'schooladmin'}
+              className={'input'}
+              label={'role name:'}
+            />
+            <AntButton htmlType='submit'>submit</AntButton>
+          </form>
+        )}
+      </div>
+
       <form onSubmit={handleUserSubmit(createUser)} className='my-5'>
         <div className='flex flex-col md:flex-row gap-3'>
           <Input

@@ -1,36 +1,48 @@
-import Button from '../../components/Button';
-import Input from '../../components/forms/Input';
-import authRequest from '../../config/requests';
-import { useForm } from 'react-hook-form';
-import { Result } from 'antd';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import authRequest from '../../config/requests';
+import Input from '../../components/forms/Input';
+import Button from '../../components/Button';
+import { Result, Spin } from 'antd';
 
-function ForgotPassword() {
+const ResetPassword = () => {
+  const [searchParams] = useSearchParams();
+
+  const id = searchParams.get('user_id');
+  const token = searchParams.get('token');
   const [showResult, setShowResult] = useState(false);
   const [error, setError] = useState(false);
+  const [isSending, setIsSending] = useState(false);
 
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      email: '',
+      password: '',
+      confirm_password: '',
     },
   });
 
   const handleResetPassword = async (data) => {
+    setIsSending(true);
     try {
-      const res = await authRequest.get(`forget_password/?email=${data.email}`);
+      const res = await authRequest.put(
+        `reset_password/?user_id=${id}&token=${token}`,
+        { password: data.password }
+      );
       const responseData = res.data;
       if (responseData.status === 'success') {
         toast.success(responseData.message);
         reset();
       } else {
         setError(true);
-        toast.error('Mail not sent. please try again');
+        toast.error('failed to reset passord');
       }
     } catch (error) {
       console.log(error);
@@ -38,6 +50,7 @@ function ForgotPassword() {
       toast.error('An error occurred. please try again');
     } finally {
       setShowResult(true);
+      setIsSending(false);
     }
   };
 
@@ -49,34 +62,49 @@ function ForgotPassword() {
   return (
     <div className='flex flex-col gap-6 w-full items-center relative bg-[url("../src/assets/trianglify-lowres.png")] px-2 h-screen bg-no-repeat bg-cover'>
       <h2 className='text-2xl font-semibold mb-4 self-start justify-self-start py-5 text-gray-500'>
-        Forgot Password
+        Password Reset
       </h2>
       <form
         onSubmit={handleSubmit(handleResetPassword)}
         className='w-5/6 md:w-2/4 lg:w-1/4 flex flex-col bg-form px-4 py-4 rounded-md'
       >
         <Input
-          name='email'
+          name='password'
           register={register}
           className={
-            'input border w-full bg-[url("../src/assets/email.svg")] bg-no-repeat bg-pl login'
+            'input bg-[url("../src/assets/lock.svg")] bg-no-repeat bg-pl login'
           }
-          error={errors.email}
-          label={'email'}
+          error={errors.password}
+          label={'new password'}
           options={{
-            required: '',
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-              message: 'enter a valid email',
+            required: 'password cannot be empty',
+          }}
+          placeholder={'enter your new password'}
+          type={'password'}
+        />
+        <Input
+          name='confirm_password'
+          register={register}
+          className={'input'}
+          error={errors?.confirm_password}
+          label={'confirm password'}
+          options={{
+            required: 'please retype password',
+            validate: (val) => {
+              if (watch('password') !== val) {
+                return 'passwords do not match';
+              }
             },
           }}
-          placeholder={'enter your email'}
+          placeholder={'*******'}
+          type='password'
         />
+        {isSending && <Spin size='large' />}
         <Button
           type='submit'
-          className='bg-blue-500 text-white py-2 rounded-lg w-fit self-center px-7'
+          className='bg-blue-500 text-white py-2 rounded-lg w-fit self-center px-7 capitalize'
         >
-          Reset Password
+          new password
         </Button>
       </form>
 
@@ -89,12 +117,7 @@ function ForgotPassword() {
           <Result
             className='absolute top-1/2 -translate-y-1/2 z-20 bg-white rounded-md'
             status={error ? 'error' : 'success'}
-            title={error ? 'Message not sent' : 'Message sent'}
-            subTitle={
-              error
-                ? 'please try again '
-                : 'please check your email for reset link'
-            }
+            title={error ? 'Passord rest failed' : 'Passord reset successfully'}
             extra={[
               <Button
                 key={'okay'}
@@ -109,6 +132,6 @@ function ForgotPassword() {
       )}
     </div>
   );
-}
+};
 
-export default ForgotPassword;
+export default ResetPassword;

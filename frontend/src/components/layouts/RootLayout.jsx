@@ -1,8 +1,13 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, Navigate } from 'react-router-dom';
 import Header from '../headers/root/Header';
+import useAuthState from '../../hooks/useAuth';
 
 const RootLayout = () => {
   const date = new Date();
+  const { user } = useAuthState();
+
+  if (user) return <Navigate to={`/dashboard/${user.role}`} replace />;
+
   return (
     <>
       <Header />

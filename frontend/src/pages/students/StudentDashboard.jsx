@@ -3,7 +3,7 @@ import useAuthState from '../../hooks/useAuth';
 
 const StudentDashboard = () => {
   const { user } = useAuthState();
-  console.log(user);
+
   return (
     <div className='w-full'>
       <Header />

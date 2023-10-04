@@ -99,14 +99,14 @@ const Home = () => {
                     index % 2 === 0 ? 'md:flex-row-reverse' : 'md:flex-row'
                   }`}
                 >
-                  <div className='w-1/2 h-72'>
+                  <div className='md:w-1/2 h-72'>
                     <img
                       src={user.img}
                       alt=''
                       className='w-full object-cover'
                     />
                   </div>
-                  <div className='w-1/2'>
+                  <div className='md:w-1/2'>
                     <h5 className='font-medium text-2xl py-2 capitalize'>
                       {user.title}
                     </h5>

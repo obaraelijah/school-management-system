@@ -1,16 +1,17 @@
 import { useParams } from 'react-router-dom';
-import useApiQuery from '../../../hooks/useApiQuery';
+import useApiQuery from '../../hooks/useApiQuery';
 import { HashLoader } from 'react-spinners';
 import PropTypes from 'prop-types';
 import { Typography } from 'antd';
 
-const StudentDetails = () => {
+const TeacherDetails = () => {
   const { id } = useParams();
-  const { data } = useApiQuery([`students`, id], `students/${id}/`);
-  const student = data?.data;
+  const { data } = useApiQuery([`teachers`, id], `teachers/${id}/`);
+  const teacher = data?.data;
 
-  if (!student) return <HashLoader color='#36d7b7' />;
-  const date = new Date(student.date_of_birth);
+  console.log(teacher);
+  if (!teacher) return <HashLoader color='#36d7b7' />;
+  const date = new Date(teacher.date_of_birth);
   return (
     <div className=''>
       <div className='flex justify-between flex-col md:flex-row items-center pb-7'>
@@ -19,57 +20,57 @@ const StudentDetails = () => {
           className='font-medium
          text-lg capitalize'
         >
-          {student.school_name}
+          {teacher.school_name}
         </p>
       </div>
       <>
         <div className='flex flex-col items-center justify-between md:flex-row'>
           <MiniCard
             heading={'name'}
-            content={`${student.user_first_name} ${student.user_last_name}`}
+            content={`${teacher.user_first_name} ${teacher.user_last_name}`}
           />
-          <MiniCard heading={'gender'} content={student.gender} />
+          <MiniCard heading={'gender'} content={teacher.gender} />
         </div>
         <MiniCard
           heading={'user id'}
-          content={student.user_id}
+          content={teacher.user_id}
           canCopy={true}
         />
         <div className='flex-col flex lg:flex-row justify-between'>
           <MiniCard
-            heading={'student id'}
-            content={student.student_id}
+            heading={'teacher id'}
+            content={teacher.teacher_id}
             canCopy={true}
           />
           <MiniCard
-            heading={'student id number'}
-            content={student.student_id_number}
+            heading={'licence number'}
+            content={teacher.license_number}
           />
         </div>
         <div className='flex md:flex-row justify-between flex-col'>
-          <MiniCard heading={'city'} content={student.city} />
-          <MiniCard heading={'state'} content={student.state} />
-          <MiniCard heading={'country'} content={student.country} />
+          <MiniCard heading={'city'} content={teacher.city} />
+          <MiniCard heading={'state'} content={teacher.state} />
+          <MiniCard heading={'country'} content={teacher.country} />
         </div>
         <MiniCard heading={'date of birth'} content={date.toDateString()} />
 
-        <div className='flex-col flex lg:flex-row justify-between'>
+        {/* <div className='flex-col flex lg:flex-row justify-between'>
           <MiniCard
             heading={'department name'}
-            content={student.department_name}
+            content={teacher.department_name}
           />
           <MiniCard
             heading={'department_id'}
-            content={student.department_id}
+            content={teacher.department_id}
             canCopy={true}
           />
-        </div>
+        </div> */}
       </>
     </div>
   );
 };
 
-export default StudentDetails;
+export default TeacherDetails;
 
 const MiniCard = ({ heading, content, canCopy = false }) => {
   const { Paragraph } = Typography;

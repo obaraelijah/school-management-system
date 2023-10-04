@@ -1,4 +1,4 @@
-import Search from '../../Search';
+// import Search from '../../Search';
 import LetteredAvatar from 'react-lettered-avatar';
 import useAuthState from '../../../hooks/useAuth';
 
@@ -7,9 +7,9 @@ const Header = () => {
 
   return (
     <div className=''>
-      <header className={'flex justify-between item-center '}>
-        <Search />
-        <div className={'flex justify-end'}>
+      <header className={'flex justify-end items-center'}>
+        {/* <Search /> */}
+        <div className={'flex'}>
           <LetteredAvatar name={`${user?.first_name} ${user?.last_name}`} />
         </div>
       </header>

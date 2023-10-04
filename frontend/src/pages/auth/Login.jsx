@@ -3,10 +3,11 @@ import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import Button from '../../components/Button';
 import { toast } from 'react-toastify';
-import { baseUrl } from '../../consts';
 import useAuthState from '../../hooks/useAuth';
 import { MoonLoader } from 'react-spinners';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
+import authRequest from '../../config/requests';
+import jwt_decode from 'jwt-decode';
 
 const LogIn = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -27,16 +28,13 @@ const LogIn = () => {
   const onSubmit = async (data) => {
     try {
       setIsLoading(true);
-      const response = await fetch(`${baseUrl}auth/sign_in/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-      const res = await response.json();
-      if (response.ok) {
+      const response = await authRequest.post('auth/sign_in/', data);
+      const res = response.data;
+      console.log(response);
+      if (response.status === 200) {
         localStorage.setItem('auth', JSON.stringify(res));
+        const accessToken = jwt_decode(res.access);
+        localStorage.setItem('expiry', accessToken.exp);
         const user = res.data;
         setUser(user);
         toast.success('signed in!');
@@ -54,7 +52,10 @@ const LogIn = () => {
   if (user) return <Navigate to={`/dashboard/${user.role}`} replace />;
 
   return (
-    <div className='flex flex-col gap-6 w-full items-center md:justify-center py-20 relative bg-[url("../src/assets/trianglify-lowres.png")] px-2 h-screen bg-no-repeat bg-cover'>
+    <div className='flex flex-col gap-6 w-full items-center relative bg-[url("../src/assets/trianglify-lowres.png")] px-2 h-screen bg-no-repeat bg-cover'>
+      <h2 className='text-2xl font-semibold mb-4 self-start justify-self-start py-5 text-gray-500'>
+        Login
+      </h2>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className={`${

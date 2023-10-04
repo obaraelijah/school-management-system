@@ -1,17 +1,16 @@
+import { useSearchParams } from 'react-router-dom';
+import useAuthState from '../../hooks/useAuth';
 import { useState } from 'react';
 import useApiQuery from '../../hooks/useApiQuery';
-import { useSearchParams } from 'react-router-dom';
-import { MdDelete, MdModeEdit } from 'react-icons/md';
-import { Button, Popconfirm, Tabs, Typography } from 'antd';
 import authRequest from '../../config/requests';
 import { toast } from 'react-toastify';
-import EditModal from '../../components/modals/EditModal';
+import { Button, Popconfirm, Tabs } from 'antd';
+import { MdDelete, MdModeEdit } from 'react-icons/md';
 import UserTable from '../../components/UserTable';
-import NewCourse from './components/NewCourse';
-import { arrayToString } from '../../utils/helpers';
-import useAuthState from '../../hooks/useAuth';
+import EditModal from '../../components/modals/EditModal';
+import { BiSolidDownload } from 'react-icons/bi';
 
-const Courses = () => {
+const CourseMaterials = () => {
   const { user } = useAuthState();
   const [searchParams, setParams] = useSearchParams({
     tab: 'all',
@@ -19,12 +18,15 @@ const Courses = () => {
   });
   const [record, setRecord] = useState(null);
 
-  const { Text } = Typography;
-
   const activeTab = searchParams.get('tab');
   const isModalOpen = searchParams.get('modal') === 'true';
 
-  const { data: courses, refetch } = useApiQuery(['courses'], 'courses/');
+  const { data: materials, refetch } = useApiQuery(
+    ['materials'],
+    'course-materials/'
+  );
+
+  console.log(materials);
 
   // new course default from values
 
@@ -77,35 +79,25 @@ const Courses = () => {
   // table columns for courses
   const columns = [
     {
-      title: 'Name',
+      title: 'Course name',
       dataIndex: 'course_name',
       key: 'course_name',
     },
     {
-      title: 'Code',
-      dataIndex: 'course_code',
-      key: 'course_code',
+      title: 'Course Material Name',
+      dataIndex: 'course_material_name',
+      key: 'course_material_name',
     },
     {
-      title: 'Id',
-      dataIndex: 'course_id',
-      key: 'course_id',
-      render: (id) => {
-        return <Text copyable>{id}</Text>;
-      },
-    },
-    {
-      title: 'Credits',
-      dataIndex: 'course_credit',
-      key: 'course_credit',
-    },
-    {
-      title: 'departments',
-      dataIndex: 'departments_name',
-      key: 'departments_name',
-      render: (data) => {
-        const str = arrayToString(data);
-        return <span>{str}</span>;
+      title: 'Download',
+      dataIndex: 'course_material_file',
+      key: 'course_material_file',
+      render: (file) => {
+        return (
+          <a href={file} download onClick={(e) => e.stopPropagation()}>
+            <BiSolidDownload />
+          </a>
+        );
       },
     },
     {
@@ -154,8 +146,10 @@ const Courses = () => {
   ];
 
   return (
-    <div>
-      <h2 className='font-semibold text-3xl capitalize pb-4'>courses</h2>
+    <div className=''>
+      <h2 className='font-semibold text-3xl capitalize pb-4'>
+        course materials
+      </h2>
       <Tabs
         activeKey={activeTab}
         onChange={(activeKey) =>
@@ -174,10 +168,10 @@ const Courses = () => {
             children: (
               <UserTable
                 columns={columns}
-                data={courses?.data}
+                data={materials?.data}
                 route={''}
-                type={'course'}
-                rowKey={'course_id'}
+                type={'materials'}
+                rowKey={'course_material_id'}
                 allowClick={true}
               />
             ),
@@ -185,7 +179,6 @@ const Courses = () => {
           {
             label: 'New',
             key: 'new',
-            children: <NewCourse defaultValues={defaultValues} />,
           },
         ]}
       />
@@ -195,11 +188,11 @@ const Courses = () => {
         handleSubmit={closeModal}
         handleClose={closeModal}
       >
-        <h3 className='font-semibold'>Edit course</h3>
-        <NewCourse defaultValues={editDefaultValues} id={record?.course_id} />
+        <h3 className='font-semibold'>Edit course material</h3>
+        {/* <NewCourse defaultValues={editDefaultValues} id={record?.course_id} /> */}
       </EditModal>
     </div>
   );
 };
 
-export default Courses;
+export default CourseMaterials;

@@ -1,7 +1,6 @@
 import { Route } from 'react-router-dom';
 import App from '../App.jsx';
 import Home from '../pages/landing_pge/Home.jsx';
-import SignUp from '../pages/auth/SignUp.jsx';
 import LogIn from '../pages/auth/Login.jsx';
 import About from '../pages/about/About.jsx';
 import Contact from '../pages/contact/Contact.jsx';
@@ -19,15 +18,21 @@ import StudentDetails from '../pages/students/components/StudentDetails.jsx';
 import Departments from '../pages/dashboard/Departments.jsx';
 import Courses from '../pages/dashboard/Courses.jsx';
 import ViewCourse from '../pages/dashboard/components/ViewCourse.jsx';
+import CourseMaterials from '../pages/course-materials/CourseMaterials.jsx';
+import ForgotPassword from '../pages/auth/ForgotPassword.jsx';
+import ResetPassword from '../pages/auth/ResetPassword.jsx';
+import ConfirmEmail from '../pages/auth/ConfirmEmail.jsx';
+import TeacherDetails from '../pages/teachers/TeacherDetails.jsx';
 
 const Root = (
   <Route path='/' element={<App />} errorElement={<NotFound />}>
     {/* unauthenticated routes */}
     <Route element={<RootLayout />}>
       <Route index element={<Home />} />
-      <Route path='signup' element={<SignUp />} />
       <Route path='login' element={<LogIn />} />
-
+      <Route path='forgot_password' element={<ForgotPassword />} />
+      <Route path='confirm_email' element={<ConfirmEmail />} />
+      <Route path='reset_password' element={<ResetPassword />} />
       <Route path='/about' element={<About />} />
       <Route path='/contact' element={<Contact />} />
     </Route>
@@ -42,10 +47,33 @@ const Root = (
     >
       <Route path='dashboard' element={<DashboardLayout />}>
         {/* student allowed routes */}
-        <Route path='student' element={<StudentDashboard />} />
+        <Route
+          path='student'
+          element={
+            <RequireAuth
+              allowedRoles={['student', 'superuser', 'schooladmin']}
+            />
+          }
+        >
+          <Route index element={<StudentDashboard />} />
 
-        <Route path='student/:id' element={<StudentDetails />} />
+          <Route path=':id' element={<StudentDetails />} />
+        </Route>
+        {/* end */}
 
+        {/* teacher allowed routes */}
+        <Route
+          path='teacher'
+          element={
+            <RequireAuth
+              allowedRoles={['teacher', 'superuser', 'schooladmin']}
+            />
+          }
+        >
+          {/* <Route index element={<TeacherDashboard />} /> */}
+
+          <Route path=':id' element={<TeacherDetails />} />
+        </Route>
         {/* end */}
         <Route
           element={<RequireAuth allowedRoles={['schooladmin', 'superuser']} />}
@@ -61,6 +89,7 @@ const Root = (
             <Route path='departments' element={<Departments />} />
             <Route path='courses' element={<Courses />} />
             <Route path='courses/:id' element={<ViewCourse />} />
+            <Route path='materials' element={<CourseMaterials />} />
           </Route>
           {/* end */}
 

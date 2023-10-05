@@ -199,6 +199,10 @@ Example:
 
 - GitHub: [@efezinoidisi](https://github.com/efezinoidisi)
 
+👤 **Samuel Ng'ang'a**
+
+- GitHub: [@Sammie2022](https://github.com/Sammie2022)
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- FUTURE FEATURES -->

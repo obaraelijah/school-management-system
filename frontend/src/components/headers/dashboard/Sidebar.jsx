@@ -15,6 +15,7 @@ import useAuthState from '../../../hooks/useAuth';
 import { PiBooks } from 'react-icons/pi';
 import { RiSchoolLine } from 'react-icons/ri';
 import { motion } from 'framer-motion';
+import { roleUrl } from '../../../consts';
 
 const Sidebar = () => {
   const { user, setUser } = useAuthState();
@@ -34,9 +35,9 @@ const Sidebar = () => {
     });
   };
 
-  const role = user?.role.toLowerCase();
+  const role = user?.role;
   const superAdmin = role === 'superuser';
-  const admin = role === 'schooladmin';
+  const admin = role === 'SCHOOLADMIN';
   const admins = admin || superAdmin;
   //const teacher = role === 'teacher';
   //const student = role ==='student';
@@ -47,6 +48,8 @@ const Sidebar = () => {
     navigate('/login');
   };
 
+  const url = roleUrl[role];
+
   return (
     <aside className='h-full bg-header   text-white md:w-3/12 mx-auto'>
       <div className='hidden  w-full py-8 h-full md:flex flex-col'>
@@ -55,7 +58,7 @@ const Sidebar = () => {
           <ul className='flex gap-7 flex-col justify-center capitalize'>
             <li>
               <NavLink
-                to={`/dashboard/${role}`}
+                to={`/dashboard/${url}`}
                 className={({ isActive }) =>
                   isActive ? 'dactive dlink' : 'dlink'
                 }
@@ -97,7 +100,7 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <NavLink
-                    to={`/dashboard/schooladmin/departments?tab=all`}
+                    to={`/dashboard/sa/departments?tab=all`}
                     className={({ isActive }) =>
                       isActive ? 'dactive dlink' : 'dlink'
                     }
@@ -108,7 +111,7 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <NavLink
-                    to={`/dashboard/schooladmin/courses?tab=all`}
+                    to={`/dashboard/sa/courses?tab=all`}
                     className={({ isActive }) =>
                       isActive ? 'dactive dlink' : 'dlink'
                     }
@@ -119,7 +122,7 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <NavLink
-                    to={`/dashboard/schooladmin/materials?tab=all`}
+                    to={`/dashboard/sa/materials?tab=all`}
                     className={({ isActive }) =>
                       isActive ? 'dactive dlink' : 'dlink'
                     }
@@ -135,7 +138,7 @@ const Sidebar = () => {
               <>
                 <li>
                   <NavLink
-                    to={'/dashboard/superuser/new_school/'}
+                    to={'/dashboard/su/new_school/'}
                     className={({ isActive }) =>
                       isActive ? 'dactive dlink' : 'dlink'
                     }
@@ -201,7 +204,7 @@ const Sidebar = () => {
             <ul className='flex flex-col capitalize'>
               <li>
                 <NavLink
-                  to={`/dashboard/${role}`}
+                  to={`/dashboard/${url}`}
                   className={({ isActive }) =>
                     isActive ? 'dactive dlink' : 'dlink'
                   }
@@ -232,7 +235,7 @@ const Sidebar = () => {
                 <>
                   <li>
                     <NavLink
-                      to={`/dashboard/schooladmin/departments?tab=all`}
+                      to={`/dashboard/sa/departments?tab=all`}
                       className={({ isActive }) =>
                         isActive ? 'dactive dlink' : 'dlink'
                       }
@@ -243,7 +246,7 @@ const Sidebar = () => {
                   </li>
                   <li>
                     <NavLink
-                      to={`/dashboard/schooladmin/courses?tab=all`}
+                      to={`/dashboard/sa/courses?tab=all`}
                       className={({ isActive }) =>
                         isActive ? 'dactive dlink' : 'dlink'
                       }
@@ -254,7 +257,7 @@ const Sidebar = () => {
                   </li>
                   <li>
                     <NavLink
-                      to={`/dashboard/schooladmin/materials?tab=all`}
+                      to={`/dashboard/sa/materials?tab=all`}
                       className={({ isActive }) =>
                         isActive ? 'dactive dlink' : 'dlink'
                       }
@@ -270,7 +273,7 @@ const Sidebar = () => {
                 <>
                   <li>
                     <NavLink
-                      to={'/dashboard/superuser/new_school/'}
+                      to={'/dashboard/su/new_school/'}
                       className={({ isActive }) =>
                         isActive ? 'dactive dlink' : 'dlink'
                       }

@@ -23,6 +23,10 @@ import ForgotPassword from '../pages/auth/ForgotPassword.jsx';
 import ResetPassword from '../pages/auth/ResetPassword.jsx';
 import ConfirmEmail from '../pages/auth/ConfirmEmail.jsx';
 import TeacherDetails from '../pages/teachers/TeacherDetails.jsx';
+import GuardianDashboard from '../pages/guardians/GuardianDashboard.jsx';
+import NonTeaching from '../pages/staff/NonTeaching.jsx';
+import TeacherDashboard from '../pages/teachers/TeacherDashboard.jsx';
+import SchoolProfile from '../pages/admin/components/SchoolProfile.jsx';
 
 const Root = (
   <Route path='/' element={<App />} errorElement={<NotFound />}>
@@ -41,14 +45,22 @@ const Root = (
     <Route
       element={
         <RequireAuth
-          allowedRoles={['schooladmin', 'student', 'teacher', 'superuser']}
+          allowedRoles={[
+            'schooladmin',
+            'student',
+            'teacher',
+            'superuser',
+            'parent/guardian',
+            'non-teaching staff',
+            'school owner',
+          ]}
         />
       }
     >
       <Route path='dashboard' element={<DashboardLayout />}>
         {/* student allowed routes */}
         <Route
-          path='student'
+          path='s'
           element={
             <RequireAuth
               allowedRoles={['student', 'superuser', 'schooladmin']}
@@ -63,14 +75,14 @@ const Root = (
 
         {/* teacher allowed routes */}
         <Route
-          path='teacher'
+          path='t'
           element={
             <RequireAuth
               allowedRoles={['teacher', 'superuser', 'schooladmin']}
             />
           }
         >
-          {/* <Route index element={<TeacherDashboard />} /> */}
+          <Route index element={<TeacherDashboard />} />
 
           <Route path=':id' element={<TeacherDetails />} />
         </Route>
@@ -82,7 +94,7 @@ const Root = (
 
           {/* school admin allowed routes */}
           <Route
-            path='schooladmin'
+            path='sa'
             element={<RequireAuth allowedRoles={['schooladmin']} />}
           >
             <Route index element={<AdminDashBoard />} />
@@ -95,14 +107,29 @@ const Root = (
 
           {/* super admin routes */}
           <Route
-            path='superuser'
+            path='su'
             element={<RequireAuth allowedRoles={['superuser']} />}
           >
             <Route index element={<Admin />} />
+            <Route path='school/:id' element={<SchoolProfile />} />
             <Route path='new_school' element={<SchoolDetails />} />
           </Route>
           {/* end */}
         </Route>
+
+        <Route
+          path='pg'
+          element={<RequireAuth allowedRoles={['parent/guardian']} />}
+        >
+          <Route index element={<GuardianDashboard />} />
+        </Route>
+        <Route
+          path='ns'
+          element={<RequireAuth allowedRoles={['non-teaching staff']} />}
+        >
+          <Route index element={<NonTeaching />} />
+        </Route>
+
         <Route path='settings' element={<Settings />} />
       </Route>
     </Route>

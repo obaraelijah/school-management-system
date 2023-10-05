@@ -1,7 +1,7 @@
 import Header from '../../components/headers/dashboard/Header';
 // import useAuthState from '../../hooks/useAuth';
 
-const StudentDashboard = () => {
+const GuardianDashboard = () => {
   // const { user } = useAuthState();
 
   return (
@@ -11,4 +11,4 @@ const StudentDashboard = () => {
   );
 };
 
-export default StudentDashboard;
+export default GuardianDashboard;

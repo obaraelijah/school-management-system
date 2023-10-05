@@ -51,8 +51,9 @@ const SuperAdmin = () => {
               <UserTable
                 columns={schoolColumns}
                 data={schools?.data}
-                route={'/dashboard/school/'}
+                route={'/dashboard/su/school/'}
                 rowKey={'school_id'}
+                allowClick={false}
               />
             ),
           },

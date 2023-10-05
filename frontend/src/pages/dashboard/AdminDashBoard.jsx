@@ -259,7 +259,7 @@ const AdminDashBoard = () => {
               <UserTable
                 columns={studentsColumns}
                 data={students?.data}
-                route={'/dashboard/student/'}
+                route={'/dashboard/s/'}
                 rowKey={'student_id'}
               />
             ),
@@ -272,7 +272,7 @@ const AdminDashBoard = () => {
                 columns={teacherColumns}
                 data={teachers?.data}
                 rowKey={'teacher_id'}
-                route={'/dashboard/teacher/'}
+                route={'/dashboard/t/'}
               />
             ),
           },

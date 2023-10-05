@@ -8,6 +8,7 @@ import { MoonLoader } from 'react-spinners';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import authRequest from '../../config/requests';
 import jwt_decode from 'jwt-decode';
+import { roleUrl } from '../../consts';
 
 const LogIn = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -30,19 +31,21 @@ const LogIn = () => {
       setIsLoading(true);
       const response = await authRequest.post('auth/sign_in/', data);
       const res = response.data;
-      console.log(response);
-      if (response.status === 200) {
+      if (response?.status === 200) {
         localStorage.setItem('auth', JSON.stringify(res));
         const accessToken = jwt_decode(res.access);
         localStorage.setItem('expiry', accessToken.exp);
         const user = res.data;
         setUser(user);
+        const url = roleUrl[user.role];
+
         toast.success('signed in!');
-        navigate(`/dashboard/${user.role.toLowerCase()}`);
+        navigate(`/dashboard/${url}`);
       } else {
-        toast.error('invalid credentials!');
+        toast.error('Invalid Credentials!');
       }
     } catch (error) {
+      toast.error('Invalid Credentials!');
       toast.error(error.detail);
     } finally {
       setIsLoading(false);

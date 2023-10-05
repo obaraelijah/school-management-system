@@ -1,8 +1,14 @@
+import { Outlet } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 function App() {
   return (
-    <main className=''>
-      <h1 className=''>school management system</h1>
-    </main>
+    <>
+      <ToastContainer />
+      <Outlet />
+    </>
   );
 }
 

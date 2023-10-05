@@ -21,11 +21,15 @@ const Input = (props) => {
         type={type}
         name={name}
         id={name}
+        aria-invalid={error ? true : false}
         {...register(name, options)}
         {...others}
       />
       {error && (
-        <p className='text-red-500 text-xs pt-1 normal-case italic'>
+        <p
+          className='text-red-500 text-xs pt-1 normal-case italic'
+          role='alert'
+        >
           {error?.message}
         </p>
       )}
@@ -40,6 +44,7 @@ Input.propTypes = {
   label: PropTypes.string,
   register: PropTypes.func,
   options: PropTypes.object,
+  icon: PropTypes.node,
 };
 
 export default Input;

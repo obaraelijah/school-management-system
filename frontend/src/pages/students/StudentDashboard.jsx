@@ -1,7 +1,12 @@
+import Header from '../../components/headers/dashboard/Header';
+// import useAuthState from '../../hooks/useAuth';
+
 const StudentDashboard = () => {
+  // const { user } = useAuthState();
+
   return (
     <div className='w-full'>
-      <h2>student</h2>
+      <Header />
     </div>
   );
 };

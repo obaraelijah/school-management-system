@@ -6,10 +6,7 @@ const useApiMutation = (mutationKey, endpoint, method = 'post') => {
 
   return useMutation(
     async (data) => {
-      const response = await authRequest.request({
-        method,
-        data,
-      });
+      const response = await authRequest[method](endpoint, data);
       return response.data;
     },
     {
